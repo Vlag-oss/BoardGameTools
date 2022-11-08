@@ -1,0 +1,34 @@
+CREATE TABLE Card(
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	name TEXT NOT NULL,
+	characteristic TEXT NOT NULL,
+	value TEXT NOT NULL
+);
+
+INSERT INTO Card(id, name, characteristic, value)
+VALUES
+(1, 'MARCHE', '0', '2'),
+(2, 'MARCHE', '0', '2'),
+(3, 'ENDURANCE', '0', '2'),
+(4, 'ENDURANCE', '0', '2'),
+(5, 'CELERITE', '0', '2'),
+(6, 'CELERITE', '0', '2'),
+(7, 'RAGE', '1;2', '2'),
+(8, 'RAGE', '1;2', '2'),
+(9, 'INSTINCT', '0;1;2;3', '2'),
+(10, 'PROMESSE', '3', '2'),
+(11, 'MENACE', '3', '2'),
+(12, 'ENDURANCE GIVREE', '1;4', '2;3')
+
+CREATE TABLE Characteristic(
+	id INTEGER PRIMARY KEY,
+	name TEXT NOT NULL
+);
+
+INSERT INTO Characteristic(id, name)
+VALUES
+(0, 'MOUVEMENT'),
+(1, 'ATTAQUE'),
+(2, 'PARADE'),
+(3, 'INFLUENCE'),
+(4, 'PARADE DE GLACE')

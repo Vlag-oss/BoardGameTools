@@ -1,0 +1,37 @@
+﻿@page "/"
+@page "/mageknight"
+@using BoardGameTools.Shared.Models
+@inject HttpClient Http
+
+<h1>Mage Knight</h1>
+<hr/>
+
+<p>
+    <b>Partie 1</b><br/>
+    <i>
+        Dans ce paragraphe on retrouvera des règles rapides et globales permettant de rejouer au jeu sans se repancher dans le livret <br/>
+        Dans une future version l'utilisateur pourra se créer un compte et modifier s'il le souhaite cette partie de règle en mettant ce qui l'intéresse le plus.
+    </i>
+</p>
+
+<p>
+    <b>Partie 2</b><br/>
+    <i>
+        Dans cette partie l'utilisateur pourra utiliser l'outil d'aide au combat dans Mage Knight. <br/>
+    </i><br/>
+    <table>
+        @foreach(var card in cards)
+        {
+            <tr>
+                <td>@card.Name</td>
+            </tr>
+        }
+    </table>
+</p>
+
+@code{
+    private List<Card> cards = new();
+
+    protected override async Task OnInitializedAsync() => cards = await Http.GetFromJsonAsync<List<Card>>("api/card");
+}
+
