@@ -1,7 +1,9 @@
 ﻿@page "/"
 @page "/mageknight"
+@using BoardGameTools.Client.ViewModels
 @using BoardGameTools.Shared.Models
 @inject HttpClient Http
+@inject ICardViewModel cardViewModel
 
 <h1>Mage Knight</h1>
 <hr/>
@@ -19,19 +21,53 @@
     <i>
         Dans cette partie l'utilisateur pourra utiliser l'outil d'aide au combat dans Mage Knight. <br/>
     </i><br/>
-    <table>
-        @foreach(var card in cards)
-        {
+    <div class="form-group">
+        <input class="form-control" type="text" placeholder="Search..." @bind="Filter" @bind:event="oninput" />
+    </div>
+    <br/>
+    <table class="table">
+        <thead>
             <tr>
-                <td>@card.Name</td>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Caractéristique</th>
+                <th scope="col">Valeur</th>
             </tr>
-        }
+        </thead>
+        <tbody>
+            @foreach(var card in cards)
+            {
+                if (!IsVisible(card))
+                    continue;
+                <tr>
+                    <td>@card.Id</td>
+                    <td>@card.Name</td>
+                    <td>@card.Characteristic</td>
+                    <td>@card.Value</td>
+                </tr>
+            }
+        </tbody>
     </table>
 </p>
 
 @code{
     private List<Card> cards = new();
+    public string Filter { get; set; } = string.Empty;
 
-    protected override async Task OnInitializedAsync() => cards = await Http.GetFromJsonAsync<List<Card>>("api/card");
+    protected override async Task OnInitializedAsync() => cards = await cardViewModel.GetCard();
+
+    public bool IsVisible(Card card)
+    {
+        if (string.IsNullOrEmpty(Filter))
+            return true;
+ 
+        if (card.Name.Contains(Filter, StringComparison.OrdinalIgnoreCase))
+            return true;
+           
+        if (card.Characteristic.Contains(Filter, StringComparison.OrdinalIgnoreCase))
+            return true;
+ 
+        return false;
+    }
 }
 
