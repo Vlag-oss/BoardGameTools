@@ -1,9 +1,7 @@
-﻿using BoardGameTools.Shared.Models;
-
-namespace BoardGameTools.Client.ViewModels
+﻿namespace BoardGameTools.Client.ViewModels
 {
     public interface ICardViewModel
     {
-        public Task<List<Card>> GetCard();
+        public Task<List<CardModel>> GetCard();
     }
 }
