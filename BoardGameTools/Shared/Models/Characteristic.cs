@@ -1,4 +1,4 @@
-﻿namespace BoardGameTools.Server.Models;
+﻿namespace BoardGameTools.Shared.Models;
 
 public partial class Characteristic
 {

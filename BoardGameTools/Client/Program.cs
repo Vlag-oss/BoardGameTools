@@ -10,5 +10,6 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 builder.Services.AddTransient(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
 builder.Services.AddTransient<ICardViewModel, CardViewModel>();
+builder.Services.AddTransient<ICharacteristicViewModel, CharacteristicViewModel>();
 
 await builder.Build().RunAsync();
