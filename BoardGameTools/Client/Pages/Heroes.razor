@@ -12,7 +12,9 @@
             <b> Cartes sélectionnées </b><br/>
             @foreach(var selectedCard in selectedCards)
             {
-                <span>@selectedCard.Name</span><br/>
+                <div class="mt-2">
+                    <span>@selectedCard.Name</span><button @onclick="(() => RemoveCard(selectedCard))" type="button" class="btn-close" aria-label="Close"></button><br/>
+                </div>
             }
         </p>
     }
@@ -87,6 +89,8 @@
         else
             selectedCards.Add(card);
     }
+
+    public void RemoveCard(CardModel card) => selectedCards.Remove(card);
 
     public bool IsVisibleCard(CardModel card)
     {
