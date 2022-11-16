@@ -1,19 +1,19 @@
 ﻿@using BoardGameTools.Client.Models
 @using BoardGameTools.Client.ViewModels
-@inject ICardViewModel cardViewModel
+@inject IHeroesViewModel cardViewModel
 
 
-<WarningAlert WarningMessage="@WarningMessage"></WarningAlert>
+<WarningAlert WarningMessage="@cardViewModel.WarningMessage"></WarningAlert>
 
 <div class="mt-3">
-    @if (selectedCards.Any())
+    @if (cardViewModel.SelectedCards.Any())
     {
         <p>
             <b> Cartes sélectionnées </b><br/>
-            @foreach(var selectedCard in selectedCards)
+            @foreach(var selectedCard in cardViewModel.SelectedCards)
             {
                 <div class="mt-2">
-                    <span>@selectedCard.Name</span><button @onclick="(() => RemoveCard(selectedCard))" type="button" class="btn-close" aria-label="Close"></button><br/>
+                    <span>@selectedCard.Name</span><button @onclick="(() => cardViewModel.RemoveCard(selectedCard))" type="button" class="btn-close" aria-label="Close"></button><br/>
                 </div>
             }
         </p>
@@ -38,7 +38,7 @@
                 if (!IsVisibleCard(card))
                     continue;
                 <tr>
-                    <td><button @onclick="(() => AddCard(card))" class="btn btn-success">Add</button></td>
+                    <td><button @onclick="(() => cardViewModel.AddCard(card))" class="btn btn-success">Add</button></td>
                     <td>@card.Id</td>
                     <td>@card.Name</td>
                     <td>
@@ -76,21 +76,7 @@
 
     public string Filter { get; set; } = string.Empty;
 
-    public List<CardModel> selectedCards = new();
-
-    public string WarningMessage = string.Empty;
-
     protected override async Task OnInitializedAsync() => cards = await cardViewModel.GetCard();
-
-    public void AddCard(CardModel card)
-    {
-        if (selectedCards.Count >= 5)
-            WarningMessage = "Vous ne pouvez pas jouer plus de 5 cartes";
-        else
-            selectedCards.Add(card);
-    }
-
-    public void RemoveCard(CardModel card) => selectedCards.Remove(card);
 
     public bool IsVisibleCard(CardModel card)
     {
