@@ -2,22 +2,21 @@
 @using BoardGameTools.Shared.Models
 @inject IMonsterViewModel monsterViewModel
 
-<WarningAlert WarningMessage="@WarningMessage"></WarningAlert>
+<WarningAlert WarningMessage="@monsterViewModel.WarningMessage"></WarningAlert>
 
 <div class="mt-3">
-    @if (selectedMonster.Any())
+    @if (monsterViewModel.SelectedMonster.Any())
     {
         <p>
             <b> monstre sélectionné </b><br/>
-            @foreach(var monster in selectedMonster)
+            @foreach(var monster in monsterViewModel.SelectedMonster)
             {
                 <div class="mt-2">
-                    <span>@monster.Name</span><button @onclick="(() => RemoveMonster(monster))" type="button" class="btn-close" aria-label="Close"></button><br/>
+                    <span>@monster.Name</span><button @onclick="(() => monsterViewModel.RemoveMonster(monster))" type="button" class="btn-close" aria-label="Close"></button><br/>
                 </div>
             }
         </p>
     }
-
 
     <div class="form-group">
         <input class="form-control" type="text" placeholder="Search monsters..." @bind="Filter" @bind:event="oninput" />
@@ -38,7 +37,7 @@
                 if (!IsVisibleMonster(monster))
                     continue;
                 <tr>
-                    <td><button @onclick="(() => AddMonster(monster))" class="btn btn-success">Add</button></td>
+                    <td><button @onclick="(() => monsterViewModel.AddMonster(monster))" class="btn btn-success">Add</button></td>
                     <td>@monster.Id</td>
                     <td>@monster.Name</td>
                     <td>@monster.Attack</td>
@@ -54,21 +53,7 @@
 
     public string Filter { get; set; } = string.Empty;
 
-    private List<Monster> selectedMonster = new();
-
-    public string WarningMessage = string.Empty;
-
     protected override async Task OnInitializedAsync() => monsters = await monsterViewModel.GetMonster();
-
-    public void AddMonster(Monster monster)
-    {
-        if(selectedMonster.Count >= 1)
-            WarningMessage = "Vous ne devez sélectionner qu'un seul monstre";
-        else
-            selectedMonster.Add(monster);
-    }
-
-    public void RemoveMonster(Monster monster) => selectedMonster.Remove(monster);
 
     public bool IsVisibleMonster(Monster monster)
     {

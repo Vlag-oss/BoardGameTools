@@ -5,12 +5,15 @@ using System.Net.Http.Json;
 namespace BoardGameTools.Client.ViewModels
 {
 
-    public class CardViewModel : ICardViewModel
+    public class HeroesViewModel : IHeroesViewModel
     {
+        public List<CardModel> SelectedCards { get; set; } = new();
+        public string WarningMessage { get; set; } = string.Empty;
+
         private readonly HttpClient httpClient;
         private readonly ICharacteristicViewModel characteristicViewModel;
 
-        public CardViewModel(HttpClient httpClient, ICharacteristicViewModel characteristicViewModel)
+        public HeroesViewModel(HttpClient httpClient, ICharacteristicViewModel characteristicViewModel)
         {
             this.httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
             this.characteristicViewModel = characteristicViewModel;
@@ -26,5 +29,15 @@ namespace BoardGameTools.Client.ViewModels
                 return CardModel.Transform(card, characteristics);
             }).ToList();
         }
+
+        public void AddCard(CardModel card)
+        {
+            if (SelectedCards.Count >= 5)
+                WarningMessage = "Vous ne pouvez pas jouer plus de 5 cartes";
+            else
+                SelectedCards.Add(card);
+        }
+
+        public void RemoveCard(CardModel card) => SelectedCards.Remove(card);
     }
 }
