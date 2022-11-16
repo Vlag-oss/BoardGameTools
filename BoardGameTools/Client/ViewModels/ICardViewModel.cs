@@ -1,4 +1,6 @@
-﻿namespace BoardGameTools.Client.ViewModels
+﻿using BoardGameTools.Client.Models;
+
+namespace BoardGameTools.Client.ViewModels
 {
     public interface ICardViewModel
     {

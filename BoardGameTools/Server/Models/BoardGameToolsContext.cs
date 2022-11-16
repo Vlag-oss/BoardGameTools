@@ -18,6 +18,8 @@ public partial class BoardGameToolsContext : DbContext
 
     public virtual DbSet<Characteristic> Characteristics { get; set; }
 
+    public virtual DbSet<Monster> Monsters { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder.UseSqlite("Name=BoardGameTools");
 
@@ -40,6 +42,16 @@ public partial class BoardGameToolsContext : DbContext
             entity.Property(e => e.Id)
                 .ValueGeneratedNever()
                 .HasColumnName("id");
+            entity.Property(e => e.Name).HasColumnName("name");
+        });
+
+        modelBuilder.Entity<Monster>(entity =>
+        {
+            entity.ToTable("Monster");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Armor).HasColumnName("armor");
+            entity.Property(e => e.Attack).HasColumnName("attack");
             entity.Property(e => e.Name).HasColumnName("name");
         });
 
