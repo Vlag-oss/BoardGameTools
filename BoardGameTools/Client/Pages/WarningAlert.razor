@@ -1,0 +1,12 @@
+﻿@if (!string.IsNullOrEmpty(WarningMessage))
+{
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <span>@WarningMessage</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@code{
+    [Parameter]
+    public string WarningMessage { get; set; } = null;
+}

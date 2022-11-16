@@ -1,9 +1,5 @@
 ﻿@page "/"
 @page "/mageknight"
-@using BoardGameTools.Client.ViewModels
-@using BoardGameTools.Shared.Models
-@inject HttpClient Http
-@inject ICardViewModel cardViewModel
 
 <h1>Mage Knight</h1>
 <hr/>
@@ -18,155 +14,17 @@
 
 <p>
     <b>Partie 2</b><br/>
-    <i>
-        Dans cette partie l'utilisateur pourra utiliser l'outil d'aide au combat dans Mage Knight. <br/>
-    </i><br/>
-
-    @if (!string.IsNullOrEmpty(Error))
-    {
-        <div class="alert alert-warning alert-dismissible fade show" role="alert">
-            <span>@Error</span>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    }
-
-    @if (selectedCards.Any())
-    {
-        <p>
-            <b> Cartes sélectionnées </b><br/>
-            @foreach(var selectedCard in selectedCards)
-            {
-                <span>@selectedCard.Name</span><br/>
-            }
-        </p>
-    }
-
-    <div class="row">
+    <i>Le test classique permet de savoir si oui ou non les cartes en main peuvent tuer le monstre</i><br/>
+    <i>Le test avancé permet de savoir si les cartes en main peuvent tuer le monstre et avec la composition la plus optimal</i><br/><br/>
+    <button class="btn btn-primary">Test</button> <button class="btn btn-primary">Test avancé</button>
+    <div class="row mt-2">
         <div class="col-7">
-            <div class="form-group">
-                <input class="form-control" type="text" placeholder="Search cards..." @bind="Filter" @bind:event="oninput" />
-            </div>
-            <br/>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th scope="col">#</th>
-                        <th scope="col">Nom</th>
-                        <th scope="col">Caractéristique</th>
-                        <th scope="col">Valeur</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach(var card in cards)
-                    {
-                        if (!IsVisible(card))
-                            continue;
-                        <tr>
-                            <td><button @onclick="(() => AddCard(card))" class="btn btn-success">Add</button></td>
-                            <td>@card.Id</td>
-                            <td>@card.Name</td>
-                            <td>
-                                <table>
-                                    <tbody>
-                                        @foreach(var characteristic in @card.Characteristics)
-                                        {
-                                            <tr>
-                                                <td>@characteristic</td>
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
-                        
-                            </td>
-                            <td>
-                                <table>
-                                    <tbody>
-                                        @foreach(var value in @card.Values)
-                                        {
-                                            <tr>
-                                                <td>@value</td>
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+            <Heroes></Heroes>
         </div>
         <div class="col-1"></div>
         <div class="col-4">
-            <div class="form-group">
-                <input class="form-control" type="text" placeholder="Search monsters..." @bind="Filter" @bind:event="oninput" />
-            </div>
-            <br/>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th scope="col">#</th>
-                        <th scope="col">Nom</th>
-                        <th scope="col">Attaque</th>
-                        <th scope="col">Armure</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><button class="btn btn-success">Add</button></td>
-                        <td>1</td>
-                        <td>Rôdeurs</td>
-                        <td>4</td>
-                        <td>3</td>
-                    </tr>
-                </tbody>
-            </table>
+            <Monsters></Monsters>
         </div>
     </div>
 </p>
-
-@code{
-    private List<CardModel> cards = new();
-    public string Filter { get; set; } = string.Empty;
-
-    public List<CardModel> selectedCards = new();
-
-    public string Error = string.Empty;
-
-    protected override async Task OnInitializedAsync() => cards = await cardViewModel.GetCard();
-
-    public void AddCard(CardModel card)
-    {
-        if (selectedCards.Count >= 5)
-        {
-            Error = "Vous ne pouvez pas jouer plus de 5 cartes";
-        }
-        else
-        {
-            selectedCards.Add(card);
-        }
-    }
-
-    public bool IsVisible(CardModel card)
-    {
-        if (string.IsNullOrEmpty(Filter))
-            return true;
-
-        if (card.Name.Contains(Filter, StringComparison.OrdinalIgnoreCase))
-            return true;
-
-        var filter = false;
-
-        card.Characteristics.ForEach(charac => {
-            if (charac.Contains(Filter, StringComparison.OrdinalIgnoreCase))
-                filter = true;
-        });
-
-        if(filter)
-            return true;
-
-        return false;
-    }
-}
 

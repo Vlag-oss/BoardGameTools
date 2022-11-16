@@ -4,22 +4,21 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BoardGameTools.Server.Controllers
 {
-
     [ApiController]
     [Route("api/[controller]")]
-    public class CardController : ControllerBase
+    public class MonsterController : ControllerBase
     {
         private readonly BoardGameToolsContext context;
 
-        public CardController(BoardGameToolsContext context)
+        public MonsterController(BoardGameToolsContext context)
         {
             this.context = context;
         }
 
         [HttpGet]
-        public List<Card> Get()
+        public List<Monster> Get()
         {
-            return context.Cards.ToList();
+            return context.Monsters.ToList();
         }
     }
 }

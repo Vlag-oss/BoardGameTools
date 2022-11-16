@@ -11,5 +11,6 @@ builder.Services.AddTransient(sp => new HttpClient { BaseAddress = new Uri(build
 
 builder.Services.AddTransient<ICardViewModel, CardViewModel>();
 builder.Services.AddTransient<ICharacteristicViewModel, CharacteristicViewModel>();
+builder.Services.AddTransient<IMonsterViewModel, MonsterViewModel>();
 
 await builder.Build().RunAsync();

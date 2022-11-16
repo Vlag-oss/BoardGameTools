@@ -1,0 +1,111 @@
+﻿@using BoardGameTools.Client.Models
+@using BoardGameTools.Client.ViewModels
+@inject ICardViewModel cardViewModel
+
+
+<WarningAlert WarningMessage="@WarningMessage"></WarningAlert>
+
+<div class="mt-3">
+    @if (selectedCards.Any())
+    {
+        <p>
+            <b> Cartes sélectionnées </b><br/>
+            @foreach(var selectedCard in selectedCards)
+            {
+                <span>@selectedCard.Name</span><br/>
+            }
+        </p>
+    }
+
+    <div class="form-group">
+        <input class="form-control" type="text" placeholder="Search cards..." @bind="Filter" @bind:event="oninput" />
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th></th>
+                <th scope="col">#</th>
+                <th scope="col">Nom</th>
+                <th scope="col">Caractéristique</th>
+                <th scope="col">Valeur</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var card in cards)
+            {
+                if (!IsVisibleCard(card))
+                    continue;
+                <tr>
+                    <td><button @onclick="(() => AddCard(card))" class="btn btn-success">Add</button></td>
+                    <td>@card.Id</td>
+                    <td>@card.Name</td>
+                    <td>
+                        <table>
+                            <tbody>
+                                @foreach(var characteristic in @card.Characteristics)
+                                {
+                                    <tr>
+                                        <td>@characteristic</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </td>
+                    <td>
+                        <table>
+                            <tbody>
+                                @foreach(var value in @card.Values)
+                                {
+                                    <tr>
+                                        <td>@value</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@code {
+    private List<CardModel> cards = new();
+
+    public string Filter { get; set; } = string.Empty;
+
+    public List<CardModel> selectedCards = new();
+
+    public string WarningMessage = string.Empty;
+
+    protected override async Task OnInitializedAsync() => cards = await cardViewModel.GetCard();
+
+    public void AddCard(CardModel card)
+    {
+        if (selectedCards.Count >= 5)
+            WarningMessage = "Vous ne pouvez pas jouer plus de 5 cartes";
+        else
+            selectedCards.Add(card);
+    }
+
+    public bool IsVisibleCard(CardModel card)
+    {
+        if (string.IsNullOrEmpty(Filter))
+            return true;
+
+        if (card.Name.Contains(Filter, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        var filter = false;
+
+        card.Characteristics.ForEach(charac => {
+            if (charac.Contains(Filter, StringComparison.OrdinalIgnoreCase))
+                filter = true;
+        });
+
+        if(filter)
+            return true;
+
+        return false;
+    }
+}
