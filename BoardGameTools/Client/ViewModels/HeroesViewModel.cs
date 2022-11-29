@@ -1,6 +1,7 @@
 ﻿using BoardGameTools.Client.Models;
 using BoardGameTools.Shared.Models;
 using System.Net.Http.Json;
+using BoardGameTools.Client.ViewModels.Interfaces;
 
 namespace BoardGameTools.Client.ViewModels
 {

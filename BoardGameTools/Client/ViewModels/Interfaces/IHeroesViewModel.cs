@@ -1,6 +1,6 @@
 ﻿using BoardGameTools.Client.Models;
 
-namespace BoardGameTools.Client.ViewModels
+namespace BoardGameTools.Client.ViewModels.Interfaces
 {
     public interface IHeroesViewModel
     {

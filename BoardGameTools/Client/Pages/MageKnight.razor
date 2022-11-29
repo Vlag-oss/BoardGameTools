@@ -1,5 +1,11 @@
 ﻿@page "/"
 @page "/mageknight"
+@using BoardGameTools.Client.ViewModels.Interfaces
+@using BoardGameTools.Shared.Models
+@using BoardGameTools.Client.Models
+@inject IHeroesViewModel cardViewModel
+@inject IMonsterViewModel monsterViewModel
+@inject IFightViewModel fightViewModel
 
 <h1>Mage Knight</h1>
 <hr/>
@@ -16,15 +22,183 @@
     <b>Partie 2</b><br/>
     <i>Le test classique permet de savoir si oui ou non les cartes en main peuvent tuer le monstre</i><br/>
     <i>Le test avancé permet de savoir si les cartes en main peuvent tuer le monstre et avec la composition la plus optimal</i><br/><br/>
-    <button class="btn btn-primary">Test</button> <button class="btn btn-primary">Test avancé</button>
+    <button class="btn btn-primary" @onclick="CalculatedFight">Test</button> <button class="btn btn-primary">Test avancé</button>
     <div class="row mt-2">
         <div class="col-7">
-            <Heroes></Heroes>
+            <WarningAlert WarningMessage="@cardViewModel.WarningMessage"></WarningAlert>
+
+            <div class="mt-3">
+                @if (cardViewModel.SelectedCards.Any())
+                {
+                    <p>
+                        <b> Cartes sélectionnées </b><br/>
+                        @foreach(var selectedCard in cardViewModel.SelectedCards)
+                        {
+                            <div class="mt-2">
+                                <span>@selectedCard.Name</span><button @onclick="(() => cardViewModel.RemoveCard(selectedCard))" type="button" class="btn-close" aria-label="Close"></button><br/>
+                            </div>
+                        }
+                    </p>
+                }
+
+                <div class="form-group">
+                    <input class="form-control" type="text" placeholder="Search cards..." @bind="FilterCard" @bind:event="oninput" />
+                </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th scope="col">#</th>
+                            <th scope="col">Nom</th>
+                            <th scope="col">Caractéristique</th>
+                            <th scope="col">Valeur</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach(var card in cards)
+                        {
+                            if (!IsVisibleCard(card))
+                                continue;
+                            <tr>
+                                <td><button @onclick="(() => cardViewModel.AddCard(card))" class="btn btn-success">Add</button></td>
+                                <td>@card.Id</td>
+                                <td>@card.Name</td>
+                                <td>
+                                    <table>
+                                        <tbody>
+                                            @foreach(var characteristic in @card.Characteristics)
+                                            {
+                                                <tr>
+                                                    <td>@characteristic</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </td>
+                                <td>
+                                    <table>
+                                        <tbody>
+                                            @foreach(var value in @card.Values)
+                                            {
+                                                <tr>
+                                                    <td>@value</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
         </div>
+
         <div class="col-1"></div>
         <div class="col-4">
-            <Monsters></Monsters>
+            <WarningAlert WarningMessage="@monsterViewModel.WarningMessage"></WarningAlert>
+
+            <div class="mt-3">
+                @if (monsterViewModel.SelectedMonster.Any())
+                {
+                    <p>
+                        <b> monstre sélectionné </b><br/>
+                        @foreach(var monster in monsterViewModel.SelectedMonster)
+                        {
+                            <div class="mt-2">
+                                <span>@monster.Name</span><button @onclick="(() => monsterViewModel.RemoveMonster(monster))" type="button" class="btn-close" aria-label="Close"></button><br/>
+                            </div>
+                        }
+                    </p>
+                }
+
+                <div class="form-group">
+                    <input class="form-control" type="text" placeholder="Search monsters..." @bind="FilterMonster" @bind:event="oninput" />
+                </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th scope="col">#</th>
+                            <th scope="col">Nom</th>
+                            <th scope="col">Attaque</th>
+                            <th scope="col">Armure</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach(var monster in monsters)
+                        {
+                            if (!IsVisibleMonster(monster))
+                                continue;
+                            <tr>
+                                <td><button @onclick="(() => monsterViewModel.AddMonster(monster))" class="btn btn-success">Add</button></td>
+                                <td>@monster.Id</td>
+                                <td>@monster.Name</td>
+                                <td>@monster.Attack</td>
+                                <td>@monster.Armor</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </p>
+
+@code{
+
+    private List<CardModel> cards = new();
+
+    public List<Monster> monsters = new();
+
+    protected override async Task OnInitializedAsync() 
+    {
+        cards = await cardViewModel.GetCard();
+        monsters = await monsterViewModel.GetMonster();
+    }
+
+    public string FilterCard { get; set; } = string.Empty;
+
+    public bool IsVisibleCard(CardModel card)
+    {
+        if (string.IsNullOrEmpty(FilterCard))
+            return true;
+
+        if (card.Name.Contains(FilterCard, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        var filter = false;
+
+        card.Characteristics.ForEach(charac => {
+            if (charac.Contains(FilterCard, StringComparison.OrdinalIgnoreCase))
+                filter = true;
+        });
+
+        if(filter)
+            return true;
+
+        return false;
+    }
+
+    public string FilterMonster { get; set; } = string.Empty;
+
+    public bool IsVisibleMonster(Monster monster)
+    {
+        if (string.IsNullOrEmpty(FilterMonster))
+            return true;
+
+        if (monster.Name.Contains(FilterMonster, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        return false;
+    }
+
+    public void CalculatedFight()
+    {
+        if(cardViewModel.SelectedCards.Count > 0 && monsterViewModel.SelectedMonster.Count > 0)
+        {
+            fightViewModel.Fight(cardViewModel.SelectedCards, monsterViewModel.SelectedMonster);
+        }
+    }
+}
 
