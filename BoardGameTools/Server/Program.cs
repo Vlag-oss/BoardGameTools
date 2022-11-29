@@ -1,3 +1,6 @@
+using BoardGameTools.Server.Controllers;
+using BoardGameTools.Server.Fight;
+using BoardGameTools.Server.Fight.Interfaces;
 using BoardGameTools.Server.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,6 +10,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 builder.Services.AddEntityFrameworkSqlite().AddDbContext<BoardGameToolsContext>();
+
+builder.Services.AddTransient<IRangedAttack, RangedAttack>();
+builder.Services.AddTransient<IParry, Parry>();
+builder.Services.AddTransient<IPhysicalAttack, PhysicalAttack>();
 
 var app = builder.Build();
 
