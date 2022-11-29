@@ -12,5 +12,6 @@ builder.Services.AddTransient(sp => new HttpClient { BaseAddress = new Uri(build
 builder.Services.AddTransient<IHeroesViewModel, HeroesViewModel>();
 builder.Services.AddTransient<ICharacteristicViewModel, CharacteristicViewModel>();
 builder.Services.AddTransient<IMonsterViewModel, MonsterViewModel>();
+builder.Services.AddTransient<IFightViewModel, FightViewModel>();
 
 await builder.Build().RunAsync();

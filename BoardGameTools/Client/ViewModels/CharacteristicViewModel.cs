@@ -3,6 +3,7 @@ using System.Net.Http.Json;
 
 namespace BoardGameTools.Client.ViewModels
 {
+
     public class CharacteristicViewModel : ICharacteristicViewModel
     {
         private readonly HttpClient httpClient;

@@ -46,5 +46,19 @@ namespace BoardGameTools.Client.Models
                 : new List<string>() { value };
         }
 
+        public static List<Card> Transform(List<CardModel> cards)
+        {
+            return cards.Select(card =>
+            {
+                return new Card
+                {
+                    Id = card.Id,
+                    Name = card.Name,
+                    Characteristic = String.Join(";", card.Characteristics),
+                    Value = String.Join(";", card.Values)
+                };
+            }).ToList();
+        }
+
     }
 }
