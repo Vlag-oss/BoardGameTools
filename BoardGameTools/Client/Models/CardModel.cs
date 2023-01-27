@@ -11,7 +11,7 @@ namespace BoardGameTools.Client.Models
         public List<string> Characteristics { get; }
 
         public List<string> Values { get; }
-
+        
         private CardModel(long id, string name, List<string> characteristics, List<string> values)
         {
             Id = id;
@@ -20,13 +20,13 @@ namespace BoardGameTools.Client.Models
             Values = values;
         }
 
-        public static CardModel Transform(Card card, List<Characteristic> characteristicsList)
+        public static List<CardModel> Transform(List<Card> cards, List<Characteristic> characteristicsList)
         {
-            return new CardModel(card.Id, card.Name, GetNameOfCharacteristic(card.Characteristic), GetListOfValue(card.Value));
+            return cards.Select(card => new CardModel(card.Id, card.Name, GetNameOfCharacteristic(card.Characteristic), GetListOfValue(card.Value))).ToList();
 
             List<string> GetNameOfCharacteristic(string characteristic)
             {
-                var characteristics = characteristic.Contains(";") == true
+                var characteristics = characteristic.Contains(";")
                     ? characteristic.Split(';').ToList()
                     : new List<string>() { characteristic };
 
@@ -37,41 +37,23 @@ namespace BoardGameTools.Client.Models
                 }).ToList();
             }
 
-            List<string> GetListOfValue(string value) => value.Contains(";") == true
+            List<string> GetListOfValue(string value) => value.Contains(";")
                 ? value.Split(';').ToList()
                 : new List<string>() { value };
         }
 
         public static List<Card> Transform(List<CardModel> cards, List<Characteristic> characteristicsList)
         {
-            return cards.Select(card =>
+            return cards.Select(card => new Card
             {
-                return new Card
-                {
-                    Id = card.Id,
-                    Name = card.Name,
-                    Characteristic = string.Join(";", GetIdOfCharacteristic(card.Characteristics)),
-                    Value = string.Join(";", card.Values)
-                };
+                Id = card.Id,
+                Name = card.Name,
+                Characteristic = string.Join(";", GetIdOfCharacteristic(card.Characteristics)),
+                Value = string.Join(";", card.Values)
             }).ToList();
 
-            IEnumerable<long> GetIdOfCharacteristic(List<string> characteristics)
-            {
-                List<long> idList = new();
-
-                foreach(var charac in characteristics)
-                {
-                    foreach(var c in characteristicsList)
-                    {
-                        if(string.Equals(charac, c.Name))
-                        {
-                            idList.Add(c.Id);
-                        }
-                    }
-                }
-
-                return idList;
-            }
+            IEnumerable<long> GetIdOfCharacteristic(IEnumerable<string> characteristics)
+                => (from charac in characteristics from c in characteristicsList where string.Equals(charac, c.Name) select c.Id).ToList();
         }
 
     }

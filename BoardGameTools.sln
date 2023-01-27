@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BoardGameTools.Client", "Bo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BoardGameTools.Shared", "BoardGameTools\Shared\BoardGameTools.Shared.csproj", "{E7EC4CA2-C9F0-4E31-B44D-72DBCDB5AD4F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoardGameTools.Tests", "BoardGameTools.Tests\BoardGameTools.Tests.csproj", "{BB51E0B9-CC85-4223-8DC2-0829081D79C1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{E7EC4CA2-C9F0-4E31-B44D-72DBCDB5AD4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E7EC4CA2-C9F0-4E31-B44D-72DBCDB5AD4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E7EC4CA2-C9F0-4E31-B44D-72DBCDB5AD4F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BB51E0B9-CC85-4223-8DC2-0829081D79C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB51E0B9-CC85-4223-8DC2-0829081D79C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB51E0B9-CC85-4223-8DC2-0829081D79C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB51E0B9-CC85-4223-8DC2-0829081D79C1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

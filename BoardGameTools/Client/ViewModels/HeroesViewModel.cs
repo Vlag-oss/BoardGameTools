@@ -22,13 +22,10 @@ namespace BoardGameTools.Client.ViewModels
 
         public async Task<List<CardModel>> GetCard()
         {
-            var cards = await httpClient.GetFromJsonAsync<List<Card>>("api/card") ?? new();
+            var cards = await httpClient.GetFromJsonAsync<List<Card>>("api/card") ?? new List<Card>();
             var characteristics = await characteristicViewModel.GetCharacteristic();
 
-            return cards.Select(card =>
-            {
-                return CardModel.Transform(card, characteristics);
-            }).ToList();
+            return CardModel.Transform(cards, characteristics);
         }
 
         public void AddCard(CardModel card)
