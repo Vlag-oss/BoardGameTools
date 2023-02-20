@@ -11,12 +11,14 @@ namespace BoardGameTools.Server.Controllers
         private readonly IRangedAttack _rangedAttack;
         private readonly IParry _parry;
         private readonly IPhysicalAttack _physicalAttack;
+        private readonly ITiltedCards _tiltedCards;
 
-        public FightController(IRangedAttack rangedAttack, IParry parry, IPhysicalAttack physicalAttack)
+        public FightController(IRangedAttack rangedAttack, IParry parry, IPhysicalAttack physicalAttack, ITiltedCards tiltedCards)
         {
             _rangedAttack = rangedAttack ?? throw new ArgumentNullException(nameof(rangedAttack));
             _parry = parry ?? throw new ArgumentNullException(nameof(parry));
             _physicalAttack = physicalAttack ?? throw new ArgumentNullException(nameof(physicalAttack));
+            _tiltedCards = tiltedCards ?? throw new ArgumentNullException(nameof(tiltedCards));
         }
 
         [HttpPost("TryToFight")]
@@ -26,20 +28,33 @@ namespace BoardGameTools.Server.Controllers
             //TODO gérer les monstres invocateurs
             //TODO combat plusieurs monstres
             //TODO Rajouter les cartes inclinés sur la parade et l'attaque
-
+            
             var resultRangedAttack = _rangedAttack.RangedAttackPhase(input.Cards, input.Monster);
+            
+            if(resultRangedAttack.Result)
+                return Task.FromResult(new FightModel(true, 0, resultRangedAttack.CardsUsed));
 
-            if(resultRangedAttack)
-                return Task.FromResult(new FightModel{ Result = true, Wound = 0});
+            //CHECK TOUT LES EXCEPT CAR MISE EN PLACE DU IEQUATABLE 
 
-            var resultParry = _parry.ParryPhase(input.Cards, input.Monster);
+            var parryPhase = _parry.ParryPhase(input.Cards, input.Monster);
 
-            var cards = input.Cards.Except(resultParry.Cards).ToList();
+            var cards = input.Cards.Except(parryPhase.CardsUsed).ToList();
 
-            var resultAttack = _physicalAttack.AttackPhase(cards, input.Monster);
+            var attackPhase = _physicalAttack.AttackPhase(cards, input.Monster);
 
-            return Task.FromResult(new FightModel { Result = resultAttack.Result, Wound = !resultParry.Result ? (int)input.Monster.First().Attack : 0 });
+            _tiltedCards.TiltedPhase(input.Cards, parryPhase, attackPhase, input.Monster.First());
+
+            var cardsUsed = new List<Card>();
+            
+            return Task.FromResult(
+                new FightModel(
+                    attackPhase.Result, 
+                    !parryPhase.Result
+                        ? (int)input.Monster.First().Attack 
+                        : 0,
+                    attackPhase.Result
+                        ? cardsUsed 
+                        : new List<Card>()));
         }
-        
     }
 }

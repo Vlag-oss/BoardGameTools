@@ -32,7 +32,8 @@ public class PhysicalAttackTest
             {
                 new() { Id = 3, Name = "Attack3", Characteristic = "1", Value = "3" },
                 new() { Id = 1, Name = "Attack1", Characteristic = "1", Value = "3" }
-            }
+            },
+            6
         ));
     }
 
@@ -58,7 +59,8 @@ public class PhysicalAttackTest
             {
                 new() { Id = 3, Name = "Attack3", Characteristic = "0;1", Value = "5;3" },
                 new() { Id = 1, Name = "Attack1", Characteristic = "0;1", Value = "1;3" }
-            }
+            },
+            6
         ));
     }
 
@@ -82,7 +84,8 @@ public class PhysicalAttackTest
                 new List<Card>
                 {
                     new() { Id = 1, Name = "Attack", Characteristic = "1", Value = value }
-                }
+                },
+                int.Parse(value)
             ));
     }
 
@@ -101,7 +104,11 @@ public class PhysicalAttackTest
         );
         result.Should().BeEquivalentTo(new PhysicalAttackModel(
             false,
-            new List<Card>()
+            new List<Card>
+            {
+                new() { Id = 1, Name = "Attack", Characteristic = "1", Value = "2" }
+            },
+            2
         ));
     }
 
@@ -125,7 +132,8 @@ public class PhysicalAttackTest
             {
                 new() { Id = 1, Name = "Attack", Characteristic = "1", Value = "2" },
                 new() { Id = 2, Name = "Attack2", Characteristic = "1", Value = "4" }
-            }
+            },
+            6
         ));
     }
 
@@ -145,7 +153,12 @@ public class PhysicalAttackTest
         );
         result.Should().BeEquivalentTo(new PhysicalAttackModel(
             false,
-            new List<Card>()
+            new List<Card>
+            {
+                new() { Id = 1, Name = "Attack", Characteristic = "1", Value = "2" },
+                new() { Id = 2, Name = "Attack2", Characteristic = "1", Value = "2" }
+            },
+            4
         ));
     }
 
@@ -169,7 +182,8 @@ public class PhysicalAttackTest
             {
                 new() { Id = 1, Name = "Attack", Characteristic = "0;1", Value = "3;2" },
                 new() { Id = 2, Name = "Attack2", Characteristic = "1;2", Value = "2;4" }
-            }
+            },
+            4
         ));
     }
 
@@ -193,7 +207,8 @@ public class PhysicalAttackTest
             {
                 new() { Id = 1, Name = "Attack", Characteristic = "0;1", Value = "2" },
                 new() { Id = 2, Name = "Attack2", Characteristic = "1;2", Value = "2;4" }
-            }
+            },
+            4
         ));
     }
 
@@ -213,7 +228,12 @@ public class PhysicalAttackTest
         );
         result.Should().BeEquivalentTo(new PhysicalAttackModel(
             false,
-            new List<Card>()
+            new List<Card>
+            {
+                new() { Id = 1, Name = "Attack", Characteristic = "0;1", Value = "3;1" },
+                new() { Id = 2, Name = "Attack2", Characteristic = "1;2", Value = "2;4" }
+            },
+            3
         ));
     }
 
@@ -235,7 +255,8 @@ public class PhysicalAttackTest
             new List<Card>
             {
                 new() { Id = 1, Name = "Attack", Characteristic = "5", Value = "5" },
-            }
+            },
+            5
         ));
     }
 
@@ -245,7 +266,7 @@ public class PhysicalAttackTest
         var result = _physicalAttack.AttackPhase(
             new List<Card>
             {
-                new() { Id = 1, Name = "Attack", Characteristic = "5", Value = "2" },
+                new() { Id = 1, Name = "Attack", Characteristic = "5", Value = "2" }
             },
             new List<Monster>
             {
@@ -254,7 +275,8 @@ public class PhysicalAttackTest
         );
         result.Should().BeEquivalentTo(new PhysicalAttackModel(
             false,
-            new List<Card>()
+            new List<Card>{ new() { Id = 1, Name = "Attack", Characteristic = "5", Value = "2" } },
+            2
         ));
     }
 
@@ -277,7 +299,8 @@ public class PhysicalAttackTest
             new List<Card>
             {
                 new() { Id = 1, Name = "Attack", Characteristic = "0;5", Value = "1;5" },
-            }
+            },
+            5
         ));
     }
 
@@ -297,7 +320,12 @@ public class PhysicalAttackTest
         );
         result.Should().BeEquivalentTo(new PhysicalAttackModel(
             false,
-            new List<Card>()
+            new List<Card>
+            {
+                new() { Id = 1, Name = "Attack", Characteristic = "0;5", Value = "1;2" },
+                new() { Id = 1, Name = "Attack", Characteristic = "0;3;5;", Value = "3;2;1" }
+            },
+            3
         ));
     }
 }

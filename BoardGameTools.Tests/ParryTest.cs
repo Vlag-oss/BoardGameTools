@@ -1,5 +1,4 @@
-﻿using BoardGameTools.Server.Controllers;
-using BoardGameTools.Server.Fight;
+﻿using BoardGameTools.Server.Fight;
 using BoardGameTools.Server.Models;
 using BoardGameTools.Shared.Models;
 using FluentAssertions;
@@ -28,7 +27,9 @@ public class ParryTest
             new List<Card>
                 {
                     new() { Id = 1, Name = "Parry", Characteristic = "2", Value = "3" }
-                }));
+                },
+                3
+            ));
     }
 
     [Fact]
@@ -46,7 +47,8 @@ public class ParryTest
 
         result.Should().BeEquivalentTo(new ParryModel(
                 false,
-                new List<Card>()
+                new List<Card>{ new() { Id = 1, Name = "Parry", Characteristic = "2", Value = "1" }},
+                1
             ));
     }
 
@@ -70,7 +72,8 @@ public class ParryTest
                 {
                     new() { Id = 1, Name = "Parry", Characteristic = "2", Value = "3" },
                     new() { Id = 1, Name = "Parry", Characteristic = "2", Value = "2" },
-                }
+                },
+                5
             ));
     }
 
@@ -90,7 +93,12 @@ public class ParryTest
 
         result.Should().BeEquivalentTo(new ParryModel(
                 false,
-                new List<Card>()
+                new List<Card>
+                {
+                    new() { Id = 1, Name = "Parry", Characteristic = "2", Value = "3" },
+                    new() { Id = 1, Name = "Parry", Characteristic = "2", Value = "2" }
+                },
+                5
             ));
     }
 
@@ -117,7 +125,8 @@ public class ParryTest
             {
                 new(){ Id = 1, Name = "Card", Characteristic = "2", Value = "3" },
                 new(){ Id = 4, Name = "Card3", Characteristic = "0;2;3", Value = "2;3;1" },
-            }
+            },
+            6
         ));
     }
 
@@ -139,7 +148,13 @@ public class ParryTest
 
         result.Should().BeEquivalentTo(new ParryModel(
             false,
-            new List<Card>()
+            new List<Card>
+            {
+                new(){ Id = 1, Name = "Card", Characteristic = "2", Value = "3" },
+                new(){ Id = 3, Name = "Card2", Characteristic = "0;2;3", Value = "2;1;3" },
+                new(){ Id = 4, Name = "Card3", Characteristic = "0;2;3", Value = "2;3;1" }
+            },
+            7
         ));
     }
 
@@ -166,7 +181,8 @@ public class ParryTest
                 new(){ Id = 1, Name = "Card", Characteristic = "2", Value = "3" },
                 new(){ Id = 3, Name = "Card2", Characteristic = "0;1;2;3", Value = "2;4;1;3" },
                 new(){ Id = 4, Name = "Card3", Characteristic = "2;3", Value = "3;1" }
-            }
+            },
+            7
         ));
     }
     
@@ -192,7 +208,8 @@ public class ParryTest
             {
                 new(){ Id = 1, Name = "Card", Characteristic = "2", Value = "3" },
                 new(){ Id = 3, Name = "Card2", Characteristic = "2", Value = "3" }
-            }
+            },
+            6
         ));
     }
 
@@ -219,7 +236,8 @@ public class ParryTest
             {
                 new(){ Id = 1, Name = "Card1", Characteristic = "0;2", Value = "1;3" },
                 new(){ Id = 3, Name = "Card3", Characteristic = "0;2;3", Value = "1;3;2" }
-            }
+            },
+            6
         ));
     }
 
@@ -245,7 +263,8 @@ public class ParryTest
             {
                 new(){ Id = 1, Name = "Card1", Characteristic = "2", Value = "3" },
                 new(){ Id = 3, Name = "Card3", Characteristic = "2", Value = "3" }
-            }
+            },
+            6
         ));
     }
 }
