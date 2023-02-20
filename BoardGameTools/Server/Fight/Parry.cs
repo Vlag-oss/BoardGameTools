@@ -60,12 +60,13 @@ public class Parry : IParry
                 {
                     var checkTotalParry = _calculateFight.CalculatedFight(monsterAttack, new List<Card>(cardsWithParryAndAttack), totalParry, CharacteristicEnum.Parry);
                     result = checkTotalParry.Result;
+                    totalParry = checkTotalParry.TotalValue;
                     cardsUsed.AddRange(checkTotalParry.CardsUsed);
                 }
             }
         }
         
-        return new ParryModel(result, result ? cardsUsed : new List<Card>());
+        return new ParryModel(result, cardsUsed, totalParry);
 
         bool CardContainParryCharac(Card card) => card.Characteristic.Contains(((int)CharacteristicEnum.Parry).ToString());
         bool CardDoesntContainAttackCharac(Card card) => !card.Characteristic.Contains(((int)CharacteristicEnum.Attack).ToString());

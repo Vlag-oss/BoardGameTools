@@ -59,11 +59,12 @@ public class PhysicalAttack : IPhysicalAttack
                 {
                     var checkTotalAttack = _calculateFight.CalculatedFight(monsterArmor, new List<Card>(cardsWithRangedAttack), totalAttack, CharacteristicEnum.RangedAttack);
                     result = checkTotalAttack.Result;
+                    totalAttack = checkTotalAttack.TotalValue;
                     cardsUsed.AddRange(checkTotalAttack.CardsUsed);
                 }
             }
         }
 
-        return new PhysicalAttackModel(result, result ? cardsUsed : new List<Card>());
+        return new PhysicalAttackModel(result, cardsUsed, totalAttack);
     }
 }

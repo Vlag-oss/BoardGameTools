@@ -1,4 +1,5 @@
 ﻿using BoardGameTools.Server.Fight;
+using BoardGameTools.Server.Models;
 using BoardGameTools.Shared.Models;
 using FluentAssertions;
 
@@ -21,7 +22,11 @@ namespace BoardGameTools.Tests
                 }
             );
 
-            result.Should().BeTrue();
+            result.Should().BeEquivalentTo(new RangedAttackModel(
+                true, 
+                new List<Card>{
+                    new() { Id = 1, Name = "RangedAttack", Characteristic = "5", Value = "3" },
+                }));
         }
 
         [Fact]
@@ -37,7 +42,12 @@ namespace BoardGameTools.Tests
                 }
             );
 
-            result.Should().BeTrue();
+            result.Should().BeEquivalentTo(new RangedAttackModel(
+                true,
+                new List<Card>
+                {
+                    new() { Id = 1, Name = "RangedAttack", Characteristic = "5", Value = "5" },
+                }));
         }
 
         [Fact]
@@ -53,7 +63,9 @@ namespace BoardGameTools.Tests
                 }
             );
 
-            result.Should().BeFalse();
+            result.Should().BeEquivalentTo(new RangedAttackModel(
+                false,
+                new List<Card>()));
         }
 
         [Fact]
@@ -70,7 +82,13 @@ namespace BoardGameTools.Tests
                 }
             );
 
-            result.Should().BeTrue();
+            result.Should().BeEquivalentTo(new RangedAttackModel(
+                true,
+                new List<Card>
+                {
+                    new() { Id = 1, Name = "RangedAttack", Characteristic = "5", Value = "2" },
+                    new() { Id = 2, Name = "RangedAttack_2", Characteristic = "5", Value = "1" }
+                }));
         }
 
         [Fact]
@@ -87,7 +105,13 @@ namespace BoardGameTools.Tests
                 }
             );
 
-            result.Should().BeTrue();
+            result.Should().BeEquivalentTo(new RangedAttackModel(
+                true,
+                new List<Card>
+                {
+                    new() { Id = 1, Name = "RangedAttack", Characteristic = "5", Value = "2" },
+                    new() { Id = 2, Name = "RangedAttack_2", Characteristic = "5", Value = "3" },
+                }));
         }
     }
 }

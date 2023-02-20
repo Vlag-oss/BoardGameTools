@@ -1,12 +1,14 @@
 ﻿using BoardGameTools.Server.Fight.Interfaces;
+using BoardGameTools.Server.Models;
 using BoardGameTools.Shared.Models;
 
 namespace BoardGameTools.Server.Fight;
 
 public class RangedAttack : IRangedAttack
 {
-    public bool RangedAttackPhase(List<Card> cards, IReadOnlyCollection<Monster> monster)
+    public RangedAttackModel RangedAttackPhase(List<Card> cards, IReadOnlyCollection<Monster> monster)
     {
+        var cardsUsed = new List<Card>();
         var rangedAttackCards = cards
             .Where(c => c.Characteristic == ((int)CharacteristicEnum.RangedAttack).ToString())
             .ToList();
@@ -18,13 +20,14 @@ public class RangedAttack : IRangedAttack
             {
                 int.TryParse(rangedAttackCard.Value, out var value);
                 valueOfRangedAttack += value;
+                cardsUsed.Add(rangedAttackCard);
                 if (valueOfRangedAttack >= monster.First().Armor)
                 {
-                    return true;
+                    return new RangedAttackModel(true, cardsUsed);
                 }
             }
         }
 
-        return false;
+        return new RangedAttackModel(false, new List<Card>());
     }
 }

@@ -5,11 +5,13 @@ namespace BoardGameTools.Server.Models;
 public class PhysicalAttackModel
 {
     public bool Result { get; }
-    public List<Card> Cards { get; }
+    public List<Card> CardsUsed { get; }
+    public int TotalAttack { get; }
 
-    public PhysicalAttackModel(bool result, List<Card> cards)
+    public PhysicalAttackModel(bool result, List<Card> cardsUsed, int totalAttack)
     {
         Result = result;
-        Cards = cards;
+        CardsUsed = cardsUsed;
+        TotalAttack = totalAttack;
     }
 }

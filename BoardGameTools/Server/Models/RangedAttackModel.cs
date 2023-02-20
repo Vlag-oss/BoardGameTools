@@ -2,16 +2,14 @@
 
 namespace BoardGameTools.Server.Models;
 
-public class ParryModel
+public class RangedAttackModel
 {
     public bool Result { get; }
     public List<Card> CardsUsed { get; }
-    public int TotalParry { get; }
 
-    public ParryModel(bool result, List<Card> cardsUsed, int totalParry)
+    public RangedAttackModel(bool result, List<Card> cardsUsed)
     {
         Result = result;
         CardsUsed = cardsUsed;
-        TotalParry = totalParry;
     }
 }
