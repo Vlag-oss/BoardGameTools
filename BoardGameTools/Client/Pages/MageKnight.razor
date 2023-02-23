@@ -61,7 +61,7 @@
                             if (!IsVisibleCard(card))
                                 continue;
                             <tr>
-                                <td><button @onclick="(() => cardViewModel.AddCard(card))" class="btn btn-success">Add</button></td>
+                                <td><button @onclick="() => cardViewModel.AddCard(card)" disabled=@card.Disabled class="btn btn-success">Add</button></td>
                                 <td>@card.Id</td>
                                 <td>@card.Name</td>
                                 <td>

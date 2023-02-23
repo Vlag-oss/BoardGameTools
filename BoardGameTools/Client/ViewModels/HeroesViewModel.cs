@@ -1,7 +1,7 @@
 ﻿using BoardGameTools.Client.Models;
+using BoardGameTools.Client.ViewModels.Interfaces;
 using BoardGameTools.Shared.Models;
 using System.Net.Http.Json;
-using BoardGameTools.Client.ViewModels.Interfaces;
 
 namespace BoardGameTools.Client.ViewModels
 {
@@ -30,6 +30,8 @@ namespace BoardGameTools.Client.ViewModels
 
         public void AddCard(CardModel card)
         {
+            card.Disabled = true;
+
             if (SelectedCards.Count >= 5)
                 WarningMessage = "Vous ne pouvez pas jouer plus de 5 cartes";
             else

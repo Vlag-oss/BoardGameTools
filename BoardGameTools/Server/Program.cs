@@ -14,6 +14,8 @@ builder.Services.AddEntityFrameworkSqlite().AddDbContext<BoardGameToolsContext>(
 builder.Services.AddTransient<IRangedAttack, RangedAttack>();
 builder.Services.AddTransient<IParry, Parry>();
 builder.Services.AddTransient<IPhysicalAttack, PhysicalAttack>();
+builder.Services.AddTransient<ITiltedCards, TiltedCards>();
+builder.Services.AddTransient<ICalculateFight, CalculateFight>();
 
 var app = builder.Build();
 

@@ -11,7 +11,8 @@ namespace BoardGameTools.Client.Models
         public List<string> Characteristics { get; }
 
         public List<string> Values { get; }
-        
+        public bool Disabled { get; set; }
+
         private CardModel(long id, string name, List<string> characteristics, List<string> values)
         {
             Id = id;
