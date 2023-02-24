@@ -38,13 +38,12 @@ public class FightTest
                 new() { Id = 1, Name = "Monster", Attack = 2, Armor = 3 }
             }));
 
-        result.Should().BeEquivalentTo(new FightModel(
-            true, 
-            0, 
-            new List<Card>
+        result.Should().BeEquivalentTo(new FightModel
             {
-                new() { Id = 1, Name = "RangedAttack", Characteristic = "5", Value = "4" }
-            }));
+                Result = true, 
+                Wound = 0, 
+                CardsUsed = new List<Card>{ new() { Id = 1, Name = "RangedAttack", Characteristic = "5", Value = "4" } }
+            });
     }
 
     [Fact]
@@ -67,10 +66,10 @@ public class FightTest
             },
             new List<Monster>()));
 
-        result.Should().BeEquivalentTo(new FightModel(
-            false,
-            0,
-            new List<Card>()));
+        result.Should().BeEquivalentTo(new FightModel{
+            Result = false,
+            Wound = 0,
+            CardsUsed = new List<Card>()});
     }
 
     [Fact]
@@ -101,9 +100,10 @@ public class FightTest
             },
             new List<Monster>()));
 
-        result.Should().BeEquivalentTo(new FightModel(
-            true,
-            0,
-            new List<Card> { new() { Id = 1, Name = "Attack", Characteristic = "1", Value = "3" } }));
+        result.Should().BeEquivalentTo(new FightModel{
+            Result = true,
+            Wound = 0,
+            CardsUsed = new List<Card> { new() { Id = 1, Name = "Attack", Characteristic = "1", Value = "3" } }
+        });
     }
 }

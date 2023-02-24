@@ -13,6 +13,9 @@ public class TiltedCards : ITiltedCards
             .Except(physicalAttackModel.CardsUsed)
             .ToList();
 
+        if (parryModel.Result && physicalAttackModel.Result)
+            return new TiltedPhaseModel(true, new List<Card>());
+
         if (remainingCards.Any())
         {
             switch (parryModel.Result)
@@ -20,23 +23,23 @@ public class TiltedCards : ITiltedCards
                 case false when physicalAttackModel.Result:
                     {
                         var result = CalculatedTiltedCard(remainingCards, parryModel.TotalParry, monster.Attack);
-                        return new TiltedPhaseModel(result.Result, result.UsedCards);
+                        return new TiltedPhaseModel(result.Result, result.CardsUsed);
                     }
                 case true when !physicalAttackModel.Result:
                     {
                         var result = CalculatedTiltedCard(remainingCards, physicalAttackModel.TotalAttack, monster.Armor);
-                        return new TiltedPhaseModel(result.Result, result.UsedCards);
+                        return new TiltedPhaseModel(result.Result, result.CardsUsed);
                     }
                 case false when !physicalAttackModel.Result:
                     {
                         var resultAttack = CalculatedTiltedCard(remainingCards, physicalAttackModel.TotalAttack, monster.Armor);
-                        var resultParry = CalculatedTiltedCard(remainingCards.Except(resultAttack.UsedCards).ToList(), parryModel.TotalParry, monster.Attack);
+                        var resultParry = CalculatedTiltedCard(remainingCards.Except(resultAttack.CardsUsed).ToList(), parryModel.TotalParry, monster.Attack);
 
-                        var usedCards = new List<Card>();
-                        usedCards.AddRange(resultAttack.UsedCards);
-                        usedCards.AddRange(resultParry.UsedCards);
+                        var cardsUsed = new List<Card>();
+                        cardsUsed.AddRange(resultAttack.CardsUsed);
+                        cardsUsed.AddRange(resultParry.CardsUsed);
 
-                        return new TiltedPhaseModel(resultAttack.Result && resultParry.Result, usedCards);
+                        return new TiltedPhaseModel(resultAttack.Result && resultParry.Result, cardsUsed);
                     }
             }
         }
@@ -46,16 +49,16 @@ public class TiltedCards : ITiltedCards
 
     private static TiltedPhaseModel CalculatedTiltedCard(List<Card> remainingCards, int cardAttribute, long monsterAttribute)
     {
-        var usedCards = new List<Card>();
+        var cardsUsed = new List<Card>();
         var totalTiltedCards = cardAttribute;
         foreach (var card in remainingCards)
         {
             totalTiltedCards++;
-            usedCards.Add(card);
+            cardsUsed.Add(card);
             if (totalTiltedCards >= monsterAttribute)
-                return new TiltedPhaseModel(true, usedCards);
+                return new TiltedPhaseModel(true, cardsUsed);
         }
 
-        return new TiltedPhaseModel(false, usedCards);
+        return new TiltedPhaseModel(false, cardsUsed);
     }
 }

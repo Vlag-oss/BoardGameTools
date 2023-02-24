@@ -1,34 +1,26 @@
 ﻿using BoardGameTools.Client.Models;
+using BoardGameTools.Client.ViewModels.Interfaces;
 using BoardGameTools.Shared.Models;
 using System.Net.Http.Json;
-using BoardGameTools.Client.ViewModels.Interfaces;
-using Microsoft.AspNetCore.Components;
 
-namespace BoardGameTools.Client.ViewModels
+namespace BoardGameTools.Client.ViewModels;
+
+public class FightViewModel : IFightViewModel
 {
+    public FightModel FightModel { get; set; } = new();
+    private readonly HttpClient _httpClient;
+    private readonly ICharacteristicViewModel _characteristicViewModel;
 
-    public class FightViewModel : IFightViewModel
+    public FightViewModel(HttpClient httpClient, ICharacteristicViewModel characteristicViewModel)
     {
-        private readonly HttpClient httpClient;
-        private readonly ICharacteristicViewModel characteristicViewModel;
-        private readonly NavigationManager _navigationManager;
+        _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
+        _characteristicViewModel = characteristicViewModel;
+    }
 
-        public bool ResultFight { get; set; }
-
-        public FightViewModel(HttpClient httpClient, ICharacteristicViewModel characteristicViewModel, NavigationManager navigationManager)
-        {
-            this.httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
-            this.characteristicViewModel = characteristicViewModel;
-            _navigationManager = navigationManager ?? throw new ArgumentNullException(nameof(navigationManager));
-        }
-
-        public async void Fight(List<CardModel> cards, List<Monster> monster)
-        {
-            var characteristics = await characteristicViewModel.GetCharacteristic();
-            var response = await httpClient.PostAsJsonAsync("api/fight/TryToFight", new SelectedCards(CardModel.Transform(cards, characteristics), monster));
-            var result = await response.Content.ReadFromJsonAsync<FightModel>();
-
-            ResultFight = result.Result;
-        }
+    public async Task<FightModel> Fight(List<CardModel> cards, List<Monster> monster)
+    {
+        var characteristics = await _characteristicViewModel.GetCharacteristic();
+        var response = await _httpClient.PostAsJsonAsync("api/fight/TryToFight", new SelectedCards(CardModel.Transform(cards, characteristics), monster));
+        return await response.Content.ReadFromJsonAsync<FightModel>() ?? new FightModel();
     }
 }

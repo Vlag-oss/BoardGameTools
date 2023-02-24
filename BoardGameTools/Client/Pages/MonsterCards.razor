@@ -1,0 +1,67 @@
+﻿@using BoardGameTools.Client.ViewModels.Interfaces
+@using BoardGameTools.Shared.Models
+
+<WarningAlert WarningMessage="@MonsterViewModel.WarningMessage"></WarningAlert>
+<div class="mt-3">
+    @if (MonsterViewModel.SelectedMonster.Any())
+    {
+        <p>
+            <b> monstre sélectionné </b><br/>
+            @foreach (var monster in MonsterViewModel.SelectedMonster)
+            {
+                <div class="mt-2">
+                    <span>@monster.Name</span><button @onclick="(() => MonsterViewModel.RemoveMonster(monster))" type="button" class="btn-close" aria-label="Close"></button><br/>
+                </div>
+            }
+        </p>
+    }
+
+    <div class="form-group">
+        <input class="form-control" type="text" placeholder="Search monsters..." @bind="FilterMonster" @bind:event="oninput"/>
+    </div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th></th>
+            <th scope="col">#</th>
+            <th scope="col">Nom</th>
+            <th scope="col">Attaque</th>
+            <th scope="col">Armure</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var monster in Monsters)
+        {
+            if (!IsVisibleMonster(monster))
+                continue;
+            <tr>
+                <td><button @onclick="(() => MonsterViewModel.AddMonster(monster))" class="btn btn-success">Add</button></td>
+                <td>@monster.Id</td>
+                <td>@monster.Name</td>
+                <td>@monster.Attack</td>
+                <td>@monster.Armor</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
+
+@code {
+    [Parameter]
+    public IMonsterViewModel MonsterViewModel { get; set; }
+    [Parameter]
+    public List<Monster> Monsters { get; set; }
+
+    public string FilterMonster { get; set; } = string.Empty;
+
+    public bool IsVisibleMonster(Monster monster)
+    {
+        if (string.IsNullOrEmpty(FilterMonster))
+            return true;
+
+        if (monster.Name.Contains(FilterMonster, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        return false;
+    }
+}

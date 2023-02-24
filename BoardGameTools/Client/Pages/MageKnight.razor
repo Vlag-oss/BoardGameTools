@@ -3,9 +3,10 @@
 @using BoardGameTools.Client.ViewModels.Interfaces
 @using BoardGameTools.Shared.Models
 @using BoardGameTools.Client.Models
-@inject IHeroesViewModel cardViewModel
-@inject IMonsterViewModel monsterViewModel
-@inject IFightViewModel fightViewModel
+@inject IHeroesViewModel CardViewModel
+@inject IMonsterViewModel MonsterViewModel
+@inject IFightViewModel FightViewModel
+@inject NavigationManager NavigationManager
 
 <h1>Mage Knight</h1>
 <hr/>
@@ -22,184 +23,76 @@
     <b>Partie 2</b><br/>
     <i>Le test classique permet de savoir si oui ou non les cartes en main peuvent tuer le monstre</i><br/>
     <i>Le test avancé permet de savoir si les cartes en main peuvent tuer le monstre et avec la composition la plus optimal</i><br/><br/>
-    <button class="btn btn-primary" @onclick="CalculatedFight">Test</button> <button class="btn btn-primary">Test avancé</button>
+
+    <button class="btn btn-primary" @onclick="TestFight">Test</button> 
+    <button class="btn btn-primary" disabled>Test avancé</button>
+
     <div class="row mt-2">
-        <div class="col-7">
-            <WarningAlert WarningMessage="@cardViewModel.WarningMessage"></WarningAlert>
-            <SuccessAlert ResultFight="@fightViewModel.ResultFight"></SuccessAlert>
 
-            <div class="mt-3">
-                @if (cardViewModel.SelectedCards.Any())
-                {
-                    <p>
-                        <b> Cartes sélectionnées </b><br/>
-                        @foreach(var selectedCard in cardViewModel.SelectedCards)
-                        {
-                            <div class="mt-2">
-                                <span>@selectedCard.Name</span><button @onclick="(() => cardViewModel.RemoveCard(selectedCard))" type="button" class="btn-close" aria-label="Close"></button><br/>
-                            </div>
-                        }
-                    </p>
-                }
-
-                <div class="form-group">
-                    <input class="form-control" type="text" placeholder="Search cards..." @bind="FilterCard" @bind:event="oninput" />
-                </div>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th scope="col">#</th>
-                            <th scope="col">Nom</th>
-                            <th scope="col">Caractéristique</th>
-                            <th scope="col">Valeur</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach(var card in cards)
-                        {
-                            if (!IsVisibleCard(card))
-                                continue;
-                            <tr>
-                                <td><button @onclick="() => cardViewModel.AddCard(card)" disabled=@card.Disabled class="btn btn-success">Add</button></td>
-                                <td>@card.Id</td>
-                                <td>@card.Name</td>
-                                <td>
-                                    <table>
-                                        <tbody>
-                                            @foreach(var characteristic in @card.Characteristics)
-                                            {
-                                                <tr>
-                                                    <td>@characteristic</td>
-                                                </tr>
-                                            }
-                                        </tbody>
-                                    </table>
-                                </td>
-                                <td>
-                                    <table>
-                                        <tbody>
-                                            @foreach(var value in @card.Values)
-                                            {
-                                                <tr>
-                                                    <td>@value</td>
-                                                </tr>
-                                            }
-                                        </tbody>
-                                    </table>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
+        <div class="alert alert-success alert-dismissible fade show @_hiddenAlertSuccess" role="alert">
+            <div class="mt-5">
+                <h4>Bien joué !</h4>
+                <span>Vous pouvez battre le monstre avec les cartes suivantes :</span><br/><br/>
+                <button type="button" class="btn-close" aria-label="Close" @onclick="CloseAlertSuccess"></button>
+                <ul>
+                    @foreach (var cardUsed in _fightModel.CardsUsed)
+                    {
+                        <li style="background: #d1e7dd;">@cardUsed.Name</li>
+                    }
+                </ul>
             </div>
         </div>
 
+        <div class="alert alert-danger alert-dismissible fade show @_hiddenAlertDanger" role="alert">
+            <div class="mt-5">
+                <h4>Dommage !</h4>
+                <span>Vous ne pouvez pas battre le monstre avec vos cartes</span><br/><br/>
+                <button type="button" class="btn-close" aria-label="Close" @onclick="CloseAlertDanger"></button>
+            </div>
+        </div>
+
+        <div class="col-7">
+            <HeroCards CardViewModel="@CardViewModel" Cards="@_cards"></HeroCards>
+        </div>
         <div class="col-1"></div>
         <div class="col-4">
-            <WarningAlert WarningMessage="@monsterViewModel.WarningMessage"></WarningAlert>
-
-            <div class="mt-3">
-                @if (monsterViewModel.SelectedMonster.Any())
-                {
-                    <p>
-                        <b> monstre sélectionné </b><br/>
-                        @foreach(var monster in monsterViewModel.SelectedMonster)
-                        {
-                            <div class="mt-2">
-                                <span>@monster.Name</span><button @onclick="(() => monsterViewModel.RemoveMonster(monster))" type="button" class="btn-close" aria-label="Close"></button><br/>
-                            </div>
-                        }
-                    </p>
-                }
-
-                <div class="form-group">
-                    <input class="form-control" type="text" placeholder="Search monsters..." @bind="FilterMonster" @bind:event="oninput" />
-                </div>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th scope="col">#</th>
-                            <th scope="col">Nom</th>
-                            <th scope="col">Attaque</th>
-                            <th scope="col">Armure</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach(var monster in monsters)
-                        {
-                            if (!IsVisibleMonster(monster))
-                                continue;
-                            <tr>
-                                <td><button @onclick="(() => monsterViewModel.AddMonster(monster))" class="btn btn-success">Add</button></td>
-                                <td>@monster.Id</td>
-                                <td>@monster.Name</td>
-                                <td>@monster.Attack</td>
-                                <td>@monster.Armor</td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
+            <MonsterCards MonsterViewModel="@MonsterViewModel" Monsters="@_monsters"></MonsterCards>
         </div>
     </div>
 </p>
 
 @code{
 
-    private List<CardModel> cards = new();
+    private List<CardModel> _cards = new();
 
-    public List<Monster> monsters = new();
+    private List<Monster> _monsters = new();
 
     protected override async Task OnInitializedAsync() 
     {
-        cards = await cardViewModel.GetCard();
-        monsters = await monsterViewModel.GetMonster();
+        _cards = await CardViewModel.GetCard();
+        _monsters = await MonsterViewModel.GetMonster();
     }
 
-    public string FilterCard { get; set; } = string.Empty;
+    private FightModel _fightModel = new();
+    private string _hiddenAlertSuccess = "d-none";
+    private string _hiddenAlertDanger = "d-none";
 
-    public bool IsVisibleCard(CardModel card)
+    public async Task TestFight()
     {
-        if (string.IsNullOrEmpty(FilterCard))
-            return true;
-
-        if (card.Name.Contains(FilterCard, StringComparison.OrdinalIgnoreCase))
-            return true;
-
-        var filter = false;
-
-        card.Characteristics.ForEach(charac => {
-            if (charac.Contains(FilterCard, StringComparison.OrdinalIgnoreCase))
-                filter = true;
-        });
-
-        if(filter)
-            return true;
-
-        return false;
+        _fightModel = await FightViewModel.Fight(CardViewModel.SelectedCards, MonsterViewModel.SelectedMonster);
+        if (_fightModel.Result)
+            _hiddenAlertSuccess = string.Empty;
+        else
+            _hiddenAlertDanger = string.Empty;
     }
 
-    public string FilterMonster { get; set; } = string.Empty;
-
-    public bool IsVisibleMonster(Monster monster)
+    private void CloseAlertSuccess()
     {
-        if (string.IsNullOrEmpty(FilterMonster))
-            return true;
-
-        if (monster.Name.Contains(FilterMonster, StringComparison.OrdinalIgnoreCase))
-            return true;
-
-        return false;
+        _hiddenAlertSuccess = "d-none";
     }
 
-    public void CalculatedFight()
+    public void CloseAlertDanger()
     {
-        if(cardViewModel.SelectedCards.Count > 0 && monsterViewModel.SelectedMonster.Count > 0)
-        {
-            fightViewModel.Fight(cardViewModel.SelectedCards, monsterViewModel.SelectedMonster);
-        }
+        _hiddenAlertDanger = "d-none";
     }
 }
-
