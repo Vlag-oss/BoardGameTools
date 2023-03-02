@@ -5,7 +5,7 @@ namespace BoardGameTools.Client.ViewModels.Interfaces
 {
     public interface IFightViewModel
     {
-        void Fight(List<CardModel> cards, List<Monster> monster);
-        public bool ResultFight { get; set; }
+        public FightModel FightModel { get; set; }
+        public Task<FightModel> Fight(List<CardModel> cards, List<Monster> monster);
     }
 }

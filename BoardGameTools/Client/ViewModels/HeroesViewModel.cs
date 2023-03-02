@@ -38,6 +38,10 @@ namespace BoardGameTools.Client.ViewModels
                 SelectedCards.Add(card);
         }
 
-        public void RemoveCard(CardModel card) => SelectedCards.Remove(card);
+        public void RemoveCard(CardModel card)
+        {
+            card.Disabled = false;
+            SelectedCards.Remove(card);
+        }
     }
 }

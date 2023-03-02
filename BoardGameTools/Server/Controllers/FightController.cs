@@ -32,29 +32,27 @@ namespace BoardGameTools.Server.Controllers
             var resultRangedAttack = _rangedAttack.RangedAttackPhase(input.Cards, input.Monster);
             
             if(resultRangedAttack.Result)
-                return Task.FromResult(new FightModel(true, 0, resultRangedAttack.CardsUsed));
-
-            //CHECK TOUT LES EXCEPT CAR MISE EN PLACE DU IEQUATABLE 
+                return Task.FromResult(new FightModel{ Result = true,  Wound = 0, CardsUsed = resultRangedAttack.CardsUsed});
 
             var parryPhase = _parry.ParryPhase(input.Cards, input.Monster);
+            var remainingCards = input.Cards.Except(parryPhase.CardsUsed).ToList();
 
-            var cards = input.Cards.Except(parryPhase.CardsUsed).ToList();
+            var attackPhase = _physicalAttack.AttackPhase(remainingCards, input.Monster);
 
-            var attackPhase = _physicalAttack.AttackPhase(cards, input.Monster);
+            var tiltedPhase =  _tiltedCards.TiltedPhase(input.Cards, parryPhase, attackPhase, input.Monster.First());
 
-            _tiltedCards.TiltedPhase(input.Cards, parryPhase, attackPhase, input.Monster.First());
-
-            var cardsUsed = new List<Card>();
+            var cardsUsed = parryPhase.CardsUsed.Concat(attackPhase.CardsUsed).Concat(tiltedPhase.CardsUsed).ToList();
             
             return Task.FromResult(
-                new FightModel(
-                    attackPhase.Result, 
-                    !parryPhase.Result
+                new FightModel{
+                    Result = tiltedPhase.Result, 
+                    Wound = !parryPhase.Result
                         ? (int)input.Monster.First().Attack 
                         : 0,
-                    attackPhase.Result
+                    CardsUsed = tiltedPhase.Result
                         ? cardsUsed 
-                        : new List<Card>()));
+                        : new List<Card>()
+                });
         }
     }
 }
