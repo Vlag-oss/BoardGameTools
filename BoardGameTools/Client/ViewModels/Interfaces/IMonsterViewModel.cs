@@ -1,13 +1,13 @@
-﻿using BoardGameTools.Shared.Models;
+﻿using BoardGameTools.Client.Models;
 
 namespace BoardGameTools.Client.ViewModels.Interfaces
 {
     public interface IMonsterViewModel
     {
-        public List<Monster> SelectedMonster { get; set; }
+        public List<MonsterModel> SelectedMonster { get; set; }
         public string WarningMessage { get; set; }
-        public Task<List<Monster>> GetMonster();
-        public void AddMonster(Monster monster);
-        public void RemoveMonster(Monster monster);
+        public Task<List<MonsterModel>> GetMonster();
+        public void AddMonster(MonsterModel monster);
+        public void RemoveMonster(MonsterModel monster);
     }
 }

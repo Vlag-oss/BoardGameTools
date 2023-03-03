@@ -17,10 +17,10 @@ public class FightViewModel : IFightViewModel
         _characteristicViewModel = characteristicViewModel;
     }
 
-    public async Task<FightModel> Fight(List<CardModel> cards, List<Monster> monster)
+    public async Task<FightModel> Fight(List<CardModel> cards, List<MonsterModel> monster)
     {
         var characteristics = await _characteristicViewModel.GetCharacteristic();
-        var response = await _httpClient.PostAsJsonAsync("api/fight/TryToFight", new SelectedCards(CardModel.Transform(cards, characteristics), monster));
+        var response = await _httpClient.PostAsJsonAsync("api/fight/TryToFight", new SelectedCards(CardModel.Transform(cards, characteristics), MonsterModel.Transform(monster)));
         return await response.Content.ReadFromJsonAsync<FightModel>() ?? new FightModel();
     }
 }
