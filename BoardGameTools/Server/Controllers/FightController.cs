@@ -27,7 +27,6 @@ namespace BoardGameTools.Server.Controllers
             //TODO capacités spéciales des monstres (Fortifié, vif, poison, ...)
             //TODO gérer les monstres invocateurs
             //TODO combat plusieurs monstres
-            //TODO Rajouter les cartes inclinés sur la parade et l'attaque
             
             var resultRangedAttack = _rangedAttack.RangedAttackPhase(input.Cards, input.Monster);
             

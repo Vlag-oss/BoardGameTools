@@ -1,5 +1,6 @@
 ﻿@using BoardGameTools.Client.ViewModels.Interfaces
 @using BoardGameTools.Shared.Models
+@using BoardGameTools.Client.Models
 
 <WarningAlert WarningMessage="@MonsterViewModel.WarningMessage"></WarningAlert>
 <div class="mt-3">
@@ -27,6 +28,8 @@
             <th scope="col">Nom</th>
             <th scope="col">Attaque</th>
             <th scope="col">Armure</th>
+            <th scope="col">Capacités Défensives</th>
+            <th scope="col">Capacités Offensives</th>
         </tr>
         </thead>
         <tbody>
@@ -40,6 +43,15 @@
                 <td>@monster.Name</td>
                 <td>@monster.Attack</td>
                 <td>@monster.Armor</td>
+                @if (monster.DefensiveAbilities.Contains("_"))
+                {
+                    <td>@monster.DefensiveAbilities.Replace("_", " ")</td>
+                }
+                else
+                {
+                    <td>@monster.DefensiveAbilities</td>
+                }
+                <td>@monster.OffensiveAbilities</td>
             </tr>
         }
         </tbody>
@@ -50,11 +62,11 @@
     [Parameter]
     public IMonsterViewModel MonsterViewModel { get; set; }
     [Parameter]
-    public List<Monster> Monsters { get; set; }
+    public List<MonsterModel> Monsters { get; set; }
 
     public string FilterMonster { get; set; } = string.Empty;
 
-    public bool IsVisibleMonster(Monster monster)
+    public bool IsVisibleMonster(MonsterModel monster)
     {
         if (string.IsNullOrEmpty(FilterMonster))
             return true;

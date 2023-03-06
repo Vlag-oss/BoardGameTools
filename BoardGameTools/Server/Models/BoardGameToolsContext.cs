@@ -1,4 +1,6 @@
-﻿using BoardGameTools.Shared.Models;
+﻿using System;
+using System.Collections.Generic;
+using BoardGameTools.Shared.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace BoardGameTools.Server.Models;
@@ -50,9 +52,15 @@ public partial class BoardGameToolsContext : DbContext
             entity.ToTable("Monster");
 
             entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.Armor).HasColumnName("armor");
-            entity.Property(e => e.Attack).HasColumnName("attack");
+            entity.Property(e => e.Armor)
+                .HasColumnType("bigint")
+                .HasColumnName("armor");
+            entity.Property(e => e.Attack)
+                .HasColumnType("bigint")
+                .HasColumnName("attack");
+            entity.Property(e => e.DefensiveAbilities).HasColumnType("INT");
             entity.Property(e => e.Name).HasColumnName("name");
+            entity.Property(e => e.OffensiveAbilities).HasColumnType("INT");
         });
 
         OnModelCreatingPartial(modelBuilder);

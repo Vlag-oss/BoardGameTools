@@ -9,4 +9,8 @@ public partial class Monster
     public long Attack { get; set; }
 
     public long Armor { get; set; }
+
+    public long? DefensiveAbilities { get; set; }
+
+    public long? OffensiveAbilities { get; set; }
 }
