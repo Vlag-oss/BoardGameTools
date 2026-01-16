@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="src/BoardGameTools.Api/BoardGameTools.Api.csproj" />
+  <Project Path="src/BoardGameTools.Application/BoardGameTools.Application.csproj" />
+  <Project Path="src/BoardGameTools.Domain/BoardGameTools.Domain.csproj" />
+  <Project Path="src/BoardGameTools.Infrastructure/BoardGameTools.Infrastructure.csproj" />
+</Solution>
