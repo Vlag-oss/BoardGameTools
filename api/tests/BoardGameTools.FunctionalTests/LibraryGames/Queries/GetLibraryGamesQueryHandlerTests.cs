@@ -1,4 +1,4 @@
-﻿using BoardGameTools.Application.LibraryGames.Commands.GetLibraryGames;
+﻿using BoardGameTools.Application.LibraryGames.Queries.GetLibraryGames;
 using BoardGameTools.Domain.Entities;
 using FluentAssertions;
 

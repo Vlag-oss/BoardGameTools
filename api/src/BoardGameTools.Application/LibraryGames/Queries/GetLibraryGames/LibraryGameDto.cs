@@ -1,4 +1,4 @@
-﻿namespace BoardGameTools.Application.LibraryGames.Commands.GetLibraryGames
+﻿namespace BoardGameTools.Application.LibraryGames.Queries.GetLibraryGames
 {
     public class LibraryGameDto
     {

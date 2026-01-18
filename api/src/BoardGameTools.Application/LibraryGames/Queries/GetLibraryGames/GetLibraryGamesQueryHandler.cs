@@ -1,9 +1,13 @@
-﻿using BoardGameTools.Application.Interfaces;
+﻿using BoardGameTools.Application.Common.Interfaces;
+using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 
-namespace BoardGameTools.Application.LibraryGames.Commands.GetLibraryGames
+namespace BoardGameTools.Application.LibraryGames.Queries.GetLibraryGames
 {
+    public record GetLibraryGamesQuery(Guid OwnerId) : IRequest<List<LibraryGameDto>>;
+
     public class GetLibraryGamesQueryHandler(IAppDbContext context) : IRequestHandler<GetLibraryGamesQuery, List<LibraryGameDto>>
     {
         private readonly IAppDbContext _context = context;

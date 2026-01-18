@@ -1,25 +1,23 @@
-﻿using BoardGameTools.Application.Interfaces;
+﻿using BoardGameTools.Application.Common.Interfaces;
 using BoardGameTools.Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace BoardGameTools.Application.LibraryGames.Commands.AddLibraryGame
 {
+
+    public record AddLibraryGameCommand(Guid OwnerId, string Name, string Source, string? SourceGameId) : IRequest<Guid>;
+
     public class AddLibraryGameCommandHandler(IAppDbContext context) : IRequestHandler<AddLibraryGameCommand, Guid>
     {
         private readonly IAppDbContext _context = context;
 
         public async Task<Guid> Handle(AddLibraryGameCommand request, CancellationToken cancellationToken)
         {
-            var libraryGame = request.Source.ToLower() switch
-            {
-                "bgg" when int.TryParse(request.SourceGameId, out var bggId) =>
-                    LibraryGame.CreateFromBgg(request.OwnerId, request.Name, bggId),
-                "manual" =>
-                    LibraryGame.CreateManual(request.OwnerId, request.Name),
-                _ => throw new ArgumentException("Invalid source or source game ID.")
-            };
-
+            var libraryGame = request.Source.ToLower() == "bgg"
+                ? LibraryGame.CreateFromBgg(request.OwnerId, request.Name, int.Parse(request.SourceGameId!))
+                : LibraryGame.CreateManual(request.OwnerId, request.Name);
+             
             var exists = await _context.LibraryGames
                 .AsNoTracking()
                 .AnyAsync(g => g.OwnerId == request.OwnerId && g.Source == request.Source && g.Name == request.Name, cancellationToken);

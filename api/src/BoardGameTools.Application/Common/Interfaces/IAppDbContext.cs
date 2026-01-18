@@ -1,7 +1,7 @@
 ﻿using BoardGameTools.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace BoardGameTools.Application.Interfaces
+namespace BoardGameTools.Application.Common.Interfaces
 {
     public interface IAppDbContext
     {

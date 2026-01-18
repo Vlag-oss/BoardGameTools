@@ -1,7 +1,7 @@
 ﻿using BoardGameTools.Domain.Entities;
 using FluentAssertions;
 
-namespace BoardGameTools.UnitTests
+namespace BoardGameTools.UnitTests.LibraryGames
 {
     public class LibraryGameTests
     {

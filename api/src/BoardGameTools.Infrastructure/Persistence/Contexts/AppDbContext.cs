@@ -1,4 +1,4 @@
-﻿using BoardGameTools.Application.Interfaces;
+﻿using BoardGameTools.Application.Common.Interfaces;
 using BoardGameTools.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 

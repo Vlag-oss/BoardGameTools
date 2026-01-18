@@ -1,3 +1,4 @@
+using BoardGameTools.Application.Extensions;
 using BoardGameTools.Infrastructure.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,6 +9,7 @@ builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
+builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureService(builder.Configuration);
 
 var app = builder.Build();
