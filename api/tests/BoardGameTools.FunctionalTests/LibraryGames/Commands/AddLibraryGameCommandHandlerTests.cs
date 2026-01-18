@@ -1,11 +1,9 @@
-﻿using BoardGameTools.Application.Interfaces;
-using BoardGameTools.Application.LibraryGames.Commands.AddLibraryGame;
+﻿using BoardGameTools.Application.LibraryGames.Commands.AddLibraryGame;
 using BoardGameTools.Domain.Entities;
-using BoardGameTools.Infrastructure.Persistence.Contexts;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 
-namespace BoardGameTools.FunctionalTests
+namespace BoardGameTools.FunctionalTests.LibraryGames.Commands
 {
     public class AddLibraryGameCommandHandlerTests(PostgresContainer container) : DatabaseTestBase(container)
     {
