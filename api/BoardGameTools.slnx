@@ -3,4 +3,6 @@
   <Project Path="src/BoardGameTools.Application/BoardGameTools.Application.csproj" />
   <Project Path="src/BoardGameTools.Domain/BoardGameTools.Domain.csproj" />
   <Project Path="src/BoardGameTools.Infrastructure/BoardGameTools.Infrastructure.csproj" />
+  <Project Path="tests/BoardGameTools.FunctionalTests/BoardGameTools.FunctionalTests.csproj" Id="06cb96e4-e8a6-49c0-8e0f-adf93d6213f0" />
+  <Project Path="tests/BoardGameTools.UnitTests/BoardGameTools.UnitTests.csproj" />
 </Solution>
