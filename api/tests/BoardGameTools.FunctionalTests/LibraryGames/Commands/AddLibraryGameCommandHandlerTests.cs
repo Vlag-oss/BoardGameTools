@@ -1,5 +1,6 @@
 ﻿using BoardGameTools.Application.LibraryGames.Commands.AddLibraryGame;
 using BoardGameTools.Domain.Entities;
+using BoardGameTools.Domain.ValueObjects;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,9 +12,12 @@ namespace BoardGameTools.FunctionalTests.LibraryGames.Commands
         public async Task Handle_Should_AddManualGameAndReturnId()
         {
             //Arrange
+            var user = User.Create(Email.Create("test@test.com"), "hashed-password");
+            await AddAsync(user);
+
             await using var context = CreateDbContext();
             var handler = new AddLibraryGameCommandHandler(context);
-            var command = new AddLibraryGameCommand(Guid.NewGuid(), "Test Game", "Manual", null);
+            var command = new AddLibraryGameCommand(user.Id, "Test Game", "Manual", null);
 
             //Act
             var id = await handler.Handle(command, CancellationToken.None);
@@ -32,9 +36,12 @@ namespace BoardGameTools.FunctionalTests.LibraryGames.Commands
         public async Task Handle_Should_AddBggGameAndReturnId()
         {
             //Arrange
+            var user = User.Create(Email.Create("test@test.com"), "hashed-password");
+            await AddAsync(user);
+
             await using var context = CreateDbContext();
             var handler = new AddLibraryGameCommandHandler(context);
-            var command = new AddLibraryGameCommand(Guid.NewGuid(), "Catan", "BGG", "13");
+            var command = new AddLibraryGameCommand(user.Id, "Catan", "BGG", "13");
 
             //Act
             var id = await handler.Handle(command, CancellationToken.None);
@@ -53,12 +60,12 @@ namespace BoardGameTools.FunctionalTests.LibraryGames.Commands
         public async Task Handle_ShouldFail_WhenGameAlreadyExists()
         {
             //Arrange
-            var ownerId = Guid.NewGuid();
-
-            await AddAsync(LibraryGame.CreateManual(ownerId, "Carcassonne"));
+            var user = User.Create(Email.Create("test@test.com"), "hashed-password");
+            await AddAsync(user);
+            await AddAsync(LibraryGame.CreateManual(user.Id, "Carcassonne"));
 
             var handler = new AddLibraryGameCommandHandler(CreateDbContext());
-            var command = new AddLibraryGameCommand(ownerId, "Carcassonne", "Manual", null);
+            var command = new AddLibraryGameCommand(user.Id, "Carcassonne", "Manual", null);
 
             //Act
             Func<Task> func = () => handler.Handle(command, CancellationToken.None);
