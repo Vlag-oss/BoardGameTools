@@ -1,6 +1,6 @@
 ﻿using BoardGameTools.Application.Common.Interfaces;
 using BoardGameTools.Application.Services.Passwords;
-using BoardGameTools.Application.Users.Commands;
+using BoardGameTools.Application.Users.Commands.AddUser;
 using BoardGameTools.Domain.Entities;
 using BoardGameTools.Domain.ValueObjects;
 using FluentAssertions;

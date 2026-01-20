@@ -1,7 +1,7 @@
 ﻿using BoardGameTools.Application.Services.Passwords;
 using FluentValidation;
 
-namespace BoardGameTools.Application.Users.Commands
+namespace BoardGameTools.Application.Users.Commands.AddUser
 {
     public class AddUserCommandValidator : AbstractValidator<AddUserCommand>
     {

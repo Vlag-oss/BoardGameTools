@@ -6,7 +6,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-namespace BoardGameTools.Application.Users.Commands
+namespace BoardGameTools.Application.Users.Commands.AddUser
 {
     public record AddUserCommand(string Email, string Password, string ConfirmPassword) : IRequest<Guid>;
 

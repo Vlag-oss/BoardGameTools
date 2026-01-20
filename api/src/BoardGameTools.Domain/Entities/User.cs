@@ -41,5 +41,11 @@ namespace BoardGameTools.Domain.Entities
             EmailConfirmationToken = token;
             EmailConfirmed = false;
         }
+
+        public void SetEmailConfirmed()
+        {
+            EmailConfirmationToken = null;
+            EmailConfirmed = true;
+        }
     }
 }
