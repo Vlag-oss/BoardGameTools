@@ -10,6 +10,7 @@ namespace BoardGameTools.Domain.Entities
         public bool IsLocked { get; private set; } = false;
         public int FailedLoginAttempts { get; private set; }
         public DateTime? LastFailedLogin { get; private set; }
+        public string? EmailConfirmationToken { get; private set; }
         public bool EmailConfirmed { get; private set; } = false;
 
         public IReadOnlyCollection<LibraryGame> LibraryGames { get; private set; } = [];
@@ -30,6 +31,15 @@ namespace BoardGameTools.Domain.Entities
                 throw new ArgumentException("Le mot de passe doit contenir une valeur", nameof(passwordHash));
 
             return new(email, passwordHash);
+        }
+
+        public void SetEmailConfirmationToken(string token)
+        {
+            if (string.IsNullOrEmpty(token))
+                throw new ArgumentException("Token invalide", nameof(token));
+
+            EmailConfirmationToken = token;
+            EmailConfirmed = false;
         }
     }
 }
