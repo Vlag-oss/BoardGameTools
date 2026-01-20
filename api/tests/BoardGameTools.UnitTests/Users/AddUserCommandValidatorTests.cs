@@ -1,4 +1,4 @@
-﻿using BoardGameTools.Application.Users.Commands;
+﻿using BoardGameTools.Application.Users.Commands.AddUser;
 
 namespace BoardGameTools.UnitTests.Users
 {
