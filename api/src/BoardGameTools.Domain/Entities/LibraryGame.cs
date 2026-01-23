@@ -4,9 +4,10 @@
     {
         public Guid Id { get; private set; }
         public Guid OwnerId { get; private set; }
+        public User Owner { get; private set; } = null!;
+
 
         public string Name { get; private set; } = string.Empty;
-
         public string Source { get; private set; } = string.Empty;
         public string? SourceGameId { get; private set; }
 
