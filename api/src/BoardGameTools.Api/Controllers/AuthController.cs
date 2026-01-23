@@ -15,18 +15,20 @@ namespace BoardGameTools.Api.Endpoints
         [HttpPost("register")]
         public async Task<ActionResult<RegisterResponse>> Register(RegisterRequest request, CancellationToken ct)
         {
-            var command = new AddUserCommand(request.Email, request.Password, request.ConfirmPassword);
+            var baseUrl = $"{Request.Scheme}://{Request.Host}";
+
+            var command = new AddUserCommand(request.Email, request.Password, request.ConfirmPassword, baseUrl);
             var userId = await _sender.Send(command, ct);
 
             return Ok(new RegisterResponse(userId));
         }
 
-        [HttpPost("confirm-email")]
-        public async Task<IActionResult> ConfirmEmail(ConfirmEmailRequest request, CancellationToken ct)
+        [HttpGet("/confirm-email", Name = "ConfirmEmail")]
+        public async Task<IActionResult> ConfirmEmail(string token, CancellationToken ct)
         {
-            var command = new ConfirmEmailCommand(request.Token);
+            var command = new ConfirmEmailCommand(token);
             await _sender.Send(command, ct);
-            return NoContent();
+            return Ok();
         }
     }
 }

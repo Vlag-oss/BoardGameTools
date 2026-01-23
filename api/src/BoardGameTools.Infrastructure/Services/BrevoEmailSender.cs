@@ -16,7 +16,7 @@ namespace BoardGameTools.Infrastructure.Services
             var fromName = _brevoSection.GetRequiredValue<string>("FromName");
             var smtpServer = _brevoSection.GetRequiredValue<string>("SmtpServer");
             var smtpPort = _brevoSection.GetRequiredValue<int>("SmtpPort");
-            var smtpUser = _brevoSection.GetRequiredValue<string>("SmptUser");
+            var smtpUser = _brevoSection.GetRequiredValue<string>("SmtpUser");
             var smtpPass = _brevoSection.GetRequiredValue<string>("SmtpKey");
 
             var email = new MimeMessage();

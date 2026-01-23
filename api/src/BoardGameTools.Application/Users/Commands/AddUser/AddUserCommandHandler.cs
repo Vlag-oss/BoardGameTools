@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 
 namespace BoardGameTools.Application.Users.Commands.AddUser
 {
-    public record AddUserCommand(string Email, string Password, string ConfirmPassword) : IRequest<Guid>;
+    public record AddUserCommand(string Email, string Password, string ConfirmPassword, string ConfirmationLinkBase) : IRequest<Guid>;
 
     public class AddUserCommandHandler(
         IAppDbContext context, 
@@ -43,7 +43,7 @@ namespace BoardGameTools.Application.Users.Commands.AddUser
 
             try
             {
-                var confirmationLink = $"http://localhost:5173/confirm-email?token={token}";
+                var confirmationLink = $"{request.ConfirmationLinkBase}/confirm-email?token={Uri.EscapeDataString(token)}";
                 string emailContent = _emailTemplate.BuildEmailConfirmation(confirmationLink);
                 await _emailSender.SendAsync(email.Value, "Confirme ton compte", emailContent, ct);
             }
