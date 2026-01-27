@@ -1,16 +1,28 @@
-﻿using BoardGameTools.Api.DTOs.Register;
+﻿using BoardGameTools.Api.DTOs.Login;
+using BoardGameTools.Api.DTOs.Register;
+using BoardGameTools.Application.Login.Commands;
+using BoardGameTools.Application.Login.DTOs;
 using BoardGameTools.Application.Users.Commands.AddUser;
 using BoardGameTools.Application.Users.Commands.ConfirmEmail;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace BoardGameTools.Api.Endpoints
+namespace BoardGameTools.Api.Controllers
 {
     [ApiController]
     [Route("api/auth")]
     public class AuthController(ISender sender) : ControllerBase
     {
         private readonly ISender _sender = sender;
+
+        [HttpPost("login")]
+        public async Task<ActionResult<LoginResponse>> Login(LoginRequest login, CancellationToken ct)
+        {
+            var command = new LoginCommand(login.Email, login.Password);
+            var result = await _sender.Send(command, ct);
+
+            return Ok(result);
+        }
 
         [HttpPost("register")]
         public async Task<ActionResult<RegisterResponse>> Register(RegisterRequest request, CancellationToken ct)

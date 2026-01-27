@@ -15,7 +15,7 @@ namespace BoardGameTools.FunctionalTests.ConfirmEmail.Commands
             var token = "123-456-789";
 
             var user = User.Create(Email.Create("test@test.com"), "hashed-password");
-            user.SetEmailConfirmationToken(token);
+            user.RequireEmailConfirmation(token);
             await AddAsync(user);
 
             await using var context = CreateDbContext();
@@ -41,7 +41,7 @@ namespace BoardGameTools.FunctionalTests.ConfirmEmail.Commands
             //Arrange
             var token = "123-456-789";
             var user = User.Create(Email.Create("test@test.com"), "hashed-password");
-            user.SetEmailConfirmationToken(token);
+            user.RequireEmailConfirmation(token);
             await AddAsync(user);
 
             await using var context = CreateDbContext();

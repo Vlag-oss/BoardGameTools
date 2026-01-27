@@ -7,6 +7,7 @@ namespace BoardGameTools.Application.Common.Interfaces
     {
         DbSet<User> Users { get; }
         DbSet<LibraryGame> LibraryGames { get; }
+        DbSet<RefreshToken> RefreshTokens { get; }
 
         Task<int> SaveChangesAsync(CancellationToken ct = default);
     }
