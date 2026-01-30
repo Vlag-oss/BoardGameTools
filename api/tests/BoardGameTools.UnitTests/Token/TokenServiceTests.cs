@@ -5,11 +5,8 @@ using BoardGameTools.Domain.Entities;
 using BoardGameTools.Domain.ValueObjects;
 using FluentAssertions;
 using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
 using Moq;
 using System.IdentityModel.Tokens.Jwt;
-using System.Runtime.Intrinsics.Arm;
-using System.Text;
 
 namespace BoardGameTools.UnitTests.Token
 {
@@ -21,15 +18,16 @@ namespace BoardGameTools.UnitTests.Token
         public TokenServiceTests()
         {
             _dateTimeMock = new Mock<IDateTimeProvider>();
-            _tokenOptions = Options.Create(new TokenOptions(
-                "test_audience",
-                "test_issuer",
-                15,
-                1,
-                "super_secret_signing_key_123456789_123"
-            ));
+            _tokenOptions = Options.Create(new TokenOptions
+            {
+                Audience = "test_audience",
+                Issuer = "test_issuer",
+                AccessTokenExpirationMinutes = 15,
+                RefreshTokenExpirationDays = 1,
+                SigningKey = "super_secret_signing_key_123456789_123",
+                RefreshKey = "super_secret_refresh_key_123456789_123"
+            });
         }
-
 
         [Fact]
         public void CreateAccessToken_Should_CreateValidToken()
@@ -53,13 +51,15 @@ namespace BoardGameTools.UnitTests.Token
             var user = User.Create(Email.Create("test@gmail.com"), "hashed-password");
             _dateTimeMock.Setup(d => d.UtcNow).Returns(new DateTime(2026, 01, 24));
 
-            var tokenOptions = Options.Create(new TokenOptions(
-                "test_audience",
-                "test_issuer",
-                10,
-                1,
-                "short_key"
-            ));
+            var tokenOptions = Options.Create(new TokenOptions
+            {
+                Audience = "test_audience",
+                Issuer = "test_issuer",
+                AccessTokenExpirationMinutes = 10,
+                RefreshTokenExpirationDays = 1,
+                SigningKey = "short_key",
+                RefreshKey = "another_short_key"
+            });
 
             var service = new TokenService(tokenOptions, _dateTimeMock.Object);
 

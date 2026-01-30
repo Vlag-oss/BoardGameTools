@@ -3,7 +3,6 @@ using BoardGameTools.Application.Common.Options;
 using BoardGameTools.Application.Login.DTOs;
 using BoardGameTools.Application.Services.Passwords;
 using BoardGameTools.Application.Services.Tokens;
-using BoardGameTools.Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
