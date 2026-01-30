@@ -14,6 +14,7 @@ namespace BoardGameTools.Domain.Entities
         public bool EmailConfirmed { get; private set; } = false;
 
         public IReadOnlyCollection<LibraryGame> LibraryGames { get; private set; } = [];
+        public RefreshToken? RefreshToken { get; private set; }
 
         private User() { }
 
@@ -33,7 +34,7 @@ namespace BoardGameTools.Domain.Entities
             return new(email, passwordHash);
         }
 
-        public void SetEmailConfirmationToken(string token)
+        public void RequireEmailConfirmation(string token)
         {
             if (string.IsNullOrEmpty(token))
                 throw new ArgumentException("Token invalide", nameof(token));
@@ -42,10 +43,25 @@ namespace BoardGameTools.Domain.Entities
             EmailConfirmed = false;
         }
 
-        public void SetEmailConfirmed()
+        public void ConfirmEmail()
         {
             EmailConfirmationToken = null;
             EmailConfirmed = true;
+        }
+
+        public void Lock() => IsLocked = true;
+        public void Unlock() => IsLocked = false;
+
+        public void RegisterFailedLoginAttempt(DateTime failedAtUtc)
+        {
+            FailedLoginAttempts++;
+            LastFailedLogin = failedAtUtc;
+        }
+
+        public void ResetFailedLoginAttempts()
+        {
+            FailedLoginAttempts = 0;
+            LastFailedLogin = null;
         }
     }
 }

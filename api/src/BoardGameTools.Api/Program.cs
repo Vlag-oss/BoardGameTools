@@ -1,3 +1,4 @@
+using BoardGameTools.Application.Common.Options;
 using BoardGameTools.Application.Extensions;
 using BoardGameTools.Infrastructure.Extensions;
 
@@ -11,6 +12,24 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureService(builder.Configuration);
+
+builder.Services
+    .AddOptions<AuthOptions>()
+    .Bind(builder.Configuration.GetSection("Auth"))
+    .ValidateDataAnnotations()
+    .ValidateOnStart();
+
+builder.Services
+    .AddOptions<TokenOptions>()
+    .Bind(builder.Configuration.GetSection("Auth:Token"))
+    .ValidateDataAnnotations()
+    .ValidateOnStart();
+
+builder.Services
+    .AddOptions<BrevoOptions>()
+    .Bind(builder.Configuration.GetSection("Brevo"))
+    .ValidateDataAnnotations()
+    .ValidateOnStart();
 
 var app = builder.Build();
 

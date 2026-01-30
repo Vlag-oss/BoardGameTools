@@ -9,7 +9,7 @@ namespace BoardGameTools.UnitTests.Users
         {
             // Arrange
             var validator = new AddUserCommandValidator();
-            var command = new AddUserCommand(string.Empty, "Password123!", "Password123!");
+            var command = new AddUserCommand(string.Empty, "Password123!", "Password123!", "");
 
             // Act
             var result = validator.Validate(command);
@@ -24,7 +24,7 @@ namespace BoardGameTools.UnitTests.Users
         {
             //Arrange
             var validator = new AddUserCommandValidator();
-            var command = new AddUserCommand("invalid-email", "Password123!", "Password123!");
+            var command = new AddUserCommand("invalid-email", "Password123!", "Password123!", "");
 
             // Act
             var result = validator.Validate(command);
@@ -39,7 +39,7 @@ namespace BoardGameTools.UnitTests.Users
         {
             // Arrange
             var validator = new AddUserCommandValidator();
-            var command = new AddUserCommand("test@gmail.com", string.Empty, "Password123!");
+            var command = new AddUserCommand("test@gmail.com", string.Empty, "Password123!", "");
 
             // Act
             var result = validator.Validate(command);
@@ -59,7 +59,7 @@ namespace BoardGameTools.UnitTests.Users
         {
             // Arrange
             var validator = new AddUserCommandValidator();
-            var command = new AddUserCommand("test@gmail.com", password, password);
+            var command = new AddUserCommand("test@gmail.com", password, password, "");
 
             //Act
             var result = validator.Validate(command);
@@ -74,7 +74,7 @@ namespace BoardGameTools.UnitTests.Users
         {
             // Arrange
             var validator = new AddUserCommandValidator();
-            var command = new AddUserCommand("test@gmail.com", "Password123!", "DifferentPassword");
+            var command = new AddUserCommand("test@gmail.com", "Password123!", "DifferentPassword", "");
 
             //Act
             var result = validator.Validate(command);

@@ -13,7 +13,7 @@ namespace BoardGameTools.Application.Users.Commands.ConfirmEmail
         public async Task Handle(ConfirmEmailCommand request, CancellationToken ct)
         {
             var user = await _context.Users.SingleOrDefaultAsync(u => u.EmailConfirmationToken == request.Token, ct) ?? throw new InvalidOperationException("Le lien de configuration est invalide");
-            user.SetEmailConfirmed();
+            user.ConfirmEmail();
             await _context.SaveChangesAsync(ct);
         }
     }

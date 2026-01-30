@@ -36,7 +36,7 @@ namespace BoardGameTools.Application.Users.Commands.AddUser
             var user = new User(email, hashedPassword);
 
             var token = Guid.NewGuid().ToString();
-            user.SetEmailConfirmationToken(token);
+            user.RequireEmailConfirmation(token);
 
             _context.Users.Add(user);
             await _context.SaveChangesAsync(ct);
