@@ -8,8 +8,8 @@
         public DateTime? RevokedAt { get; private set; }
         public bool IsExpired(DateTime utcNow) => utcNow >= Expires;
         public DateTime Created { get; private set; }
-        public Guid UserId { get; set; }
-        public User User { get; set; } = null!;
+        public Guid UserId { get; private set; }
+        public User User { get; private set; } = null!;
 
         private RefreshToken() { }
 

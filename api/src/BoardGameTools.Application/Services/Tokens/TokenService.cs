@@ -56,6 +56,15 @@ namespace BoardGameTools.Application.Services.Tokens
             return RefreshToken.Create(HashRefreshToken(token), _dateTimeProvider.UtcNow.AddDays(_options.RefreshTokenExpirationDays), user);
         }
 
+        public PasswordResetToken CreateResetPasswordToken(User user)
+        {
+            var bytes = new byte[64];
+            RandomNumberGenerator.Fill(bytes);
+            var token = Convert.ToBase64String(bytes);
+
+            return PasswordResetToken.Create(HashRefreshToken(token), _dateTimeProvider.UtcNow.AddMinutes(_options.ResetPasswordTokenExpirationMinutes), user);
+        }
+
         private string HashRefreshToken(string token)
         {
             using var hmac = new HMACSHA256(Encoding.UTF8.GetBytes(_options.RefreshKey));
