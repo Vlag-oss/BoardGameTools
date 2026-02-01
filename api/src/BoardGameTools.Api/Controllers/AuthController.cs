@@ -1,8 +1,9 @@
 ﻿using BoardGameTools.Api.DTOs.Login;
+using BoardGameTools.Api.DTOs.Password;
 using BoardGameTools.Api.DTOs.Register;
 using BoardGameTools.Application.Login.Commands;
 using BoardGameTools.Application.Login.DTOs;
-using BoardGameTools.Application.Password.Queries;
+using BoardGameTools.Application.Password.Commands;
 using BoardGameTools.Application.Users.Commands.AddUser;
 using BoardGameTools.Application.Users.Commands.ConfirmEmail;
 using MediatR;
@@ -47,6 +48,12 @@ namespace BoardGameTools.Api.Controllers
         {
             var command = new ForgotPasswordCommand(email);
             await _sender.Send(command, ct);
+            return Ok();
+        }
+
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword(ResetPasswordRequest request, CancellationToken ct)
+        {
             return Ok();
         }
     }

@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace BoardGameTools.Application.Password.Queries
+namespace BoardGameTools.Application.Password.Commands
 {
     public class ForgotPasswordCommandValidator : AbstractValidator<ForgotPasswordCommand>
     {

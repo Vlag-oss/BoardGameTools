@@ -1,4 +1,4 @@
-﻿using BoardGameTools.Application.Password.Queries;
+﻿using BoardGameTools.Application.Password.Commands;
 using FluentAssertions;
 
 namespace BoardGameTools.UnitTests.Password

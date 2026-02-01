@@ -1,6 +1,6 @@
 ﻿using BoardGameTools.Application.Common.Interfaces;
 using BoardGameTools.Application.Common.Options;
-using BoardGameTools.Application.Password.Queries;
+using BoardGameTools.Application.Password.Commands;
 using BoardGameTools.Application.Services.Tokens;
 using BoardGameTools.Domain.Entities;
 using BoardGameTools.Domain.ValueObjects;

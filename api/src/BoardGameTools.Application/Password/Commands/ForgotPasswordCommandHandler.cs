@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace BoardGameTools.Application.Password.Queries
+namespace BoardGameTools.Application.Password.Commands
 {
     public record ForgotPasswordCommand(string Email) : IRequest<Unit>;
 
