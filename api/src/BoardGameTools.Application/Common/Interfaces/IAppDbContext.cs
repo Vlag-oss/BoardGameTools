@@ -6,7 +6,7 @@ namespace BoardGameTools.Application.Common.Interfaces
     public interface IAppDbContext
     {
         DbSet<User> Users { get; }
-        DbSet<LibraryGame> LibraryGames { get; }
+        DbSet<Game> Games { get; }
         DbSet<RefreshToken> RefreshTokens { get; }
         DbSet<PasswordResetToken> PasswordResetToken { get; }
 
