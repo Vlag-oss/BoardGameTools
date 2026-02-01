@@ -11,20 +11,28 @@
 
         private PasswordResetToken() { }
 
-        public PasswordResetToken(string tokenHash, DateTime expires, User user)
+        public PasswordResetToken(string tokenHash, DateTime expires, Guid userId)
         {
             Id = Guid.NewGuid();
             TokenHash = tokenHash;
             Expires = expires;
-            User = user;
+            UserId = userId;
         }
 
-        public static PasswordResetToken Create(string tokenHash, DateTime expires, User user)
+        public static PasswordResetToken Create(string tokenHash, DateTime expires, Guid userId)
         {
             if (string.IsNullOrEmpty(tokenHash))
                 throw new ArgumentException("Le jeton de reset doit contenir une valeur", nameof(tokenHash));
 
-            return new PasswordResetToken(tokenHash, expires, user);
+            return new PasswordResetToken(tokenHash, expires, userId);
+        }
+
+        public void MarkAsUsed()
+        {
+            if(IsUsed)
+                throw new InvalidOperationException("Le jeton de reset a déjà été utilisé.");
+
+            IsUsed = true;
         }
     }
 }

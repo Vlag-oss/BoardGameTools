@@ -1,6 +1,6 @@
 ﻿using BoardGameTools.Application.Password.Commands;
 
-namespace BoardGameTools.UnitTests.Users
+namespace BoardGameTools.UnitTests.Password
 {
     public class ResetPasswordCommandValidatorTests
     {

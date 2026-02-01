@@ -63,5 +63,13 @@ namespace BoardGameTools.Domain.Entities
             FailedLoginAttempts = 0;
             LastFailedLogin = null;
         }
+
+        public void ResetPassword(string newHashedPassword)
+        {
+            if(string.IsNullOrEmpty(newHashedPassword))
+                throw new ArgumentException("Le mot de passe doit contenir une valeur", nameof(newHashedPassword));
+
+            PasswordHash = newHashedPassword;
+        }
     }
 }

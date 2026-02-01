@@ -54,6 +54,8 @@ namespace BoardGameTools.Api.Controllers
         [HttpPost("reset-password")]
         public async Task<IActionResult> ResetPassword(ResetPasswordRequest request, CancellationToken ct)
         {
+            var command = new ResetPasswordCommand(request.Token, request.NewPassword, request.ConfirmPassword);
+            await _sender.Send(command, ct);
             return Ok();
         }
     }
