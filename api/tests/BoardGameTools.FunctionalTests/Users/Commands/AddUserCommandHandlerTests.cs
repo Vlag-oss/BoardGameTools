@@ -1,4 +1,5 @@
 ﻿using BoardGameTools.Application.Common.Interfaces;
+using BoardGameTools.Application.Common.Options;
 using BoardGameTools.Application.Services.Passwords;
 using BoardGameTools.Application.Users.Commands.AddUser;
 using BoardGameTools.Domain.Entities;
@@ -6,6 +7,7 @@ using BoardGameTools.Domain.ValueObjects;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Moq;
 
 namespace BoardGameTools.FunctionalTests.Users.Commands
@@ -16,14 +18,18 @@ namespace BoardGameTools.FunctionalTests.Users.Commands
         private readonly Mock<IEmailSender> _mailSenderMock = new();
         private readonly Mock<IEmailTemplate> _templateMock = new();
         private readonly Mock<ILogger<AddUserCommandHandler>> _loggerMock = new();
+        private readonly IOptions<ClientOptions> _clientOptions = Options.Create(new ClientOptions
+        {
+            BaseUrl = "https://boardgametools.test"
+        });
 
         [Fact]
         public async Task Handle_Shoud_AddUserAndReturnId()
         {
             //Arrange
             await using var context = CreateDbContext();
-            var handler = new AddUserCommandHandler(context, _passwordHasherMock.Object, _mailSenderMock.Object, _templateMock.Object, _loggerMock.Object);
-            var command = new AddUserCommand("test@gmail.com", "Password123!", "Password123!", string.Empty);
+            var handler = new AddUserCommandHandler(context, _passwordHasherMock.Object, _mailSenderMock.Object, _templateMock.Object, _clientOptions, _loggerMock.Object);
+            var command = new AddUserCommand("test@gmail.com", "Password123!", "Password123!");
 
             _passwordHasherMock.Setup(ph => ph.Hash(It.IsAny<string>())).Returns("hashedPassword");
             var emailContent = "<html></html>";
@@ -51,8 +57,8 @@ namespace BoardGameTools.FunctionalTests.Users.Commands
             await AddAsync(user);
 
             await using var context = CreateDbContext();
-            var handler = new AddUserCommandHandler(context, _passwordHasherMock.Object, _mailSenderMock.Object, _templateMock.Object, _loggerMock.Object);
-            var command = new AddUserCommand("test@test.com", "Password123!", "Password123!", string.Empty);
+            var handler = new AddUserCommandHandler(context, _passwordHasherMock.Object, _mailSenderMock.Object, _templateMock.Object, _clientOptions, _loggerMock.Object);
+            var command = new AddUserCommand("test@test.com", "Password123!", "Password123!");
 
             //Act
             Func<Task> func = () => handler.Handle(command, CancellationToken.None);
@@ -74,8 +80,8 @@ namespace BoardGameTools.FunctionalTests.Users.Commands
             var ex = new Exception("Ceci est un test");
             _mailSenderMock.Setup(m => m.SendAsync("test@gmail.com", "Confirme ton compte", emailContent, It.IsAny<CancellationToken>())).ThrowsAsync(ex);
 
-            var handler = new AddUserCommandHandler(context, _passwordHasherMock.Object, _mailSenderMock.Object, _templateMock.Object, _loggerMock.Object);
-            var command = new AddUserCommand("test@gmail.com", "Password123!", "Password123!", string.Empty);
+            var handler = new AddUserCommandHandler(context, _passwordHasherMock.Object, _mailSenderMock.Object, _templateMock.Object, _clientOptions, _loggerMock.Object);
+            var command = new AddUserCommand("test@gmail.com", "Password123!", "Password123!");
 
             //Act
             var userId = await handler.Handle(command, CancellationToken.None);

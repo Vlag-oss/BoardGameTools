@@ -31,6 +31,12 @@ builder.Services
     .ValidateDataAnnotations()
     .ValidateOnStart();
 
+builder.Services
+    .AddOptions<ClientOptions>()
+    .Bind(builder.Configuration.GetSection("Client"))
+    .ValidateDataAnnotations()
+    .ValidateOnStart();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

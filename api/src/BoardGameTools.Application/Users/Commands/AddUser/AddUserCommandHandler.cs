@@ -1,20 +1,23 @@
 ﻿using BoardGameTools.Application.Common.Interfaces;
+using BoardGameTools.Application.Common.Options;
 using BoardGameTools.Application.Services.Passwords;
 using BoardGameTools.Domain.Entities;
 using BoardGameTools.Domain.ValueObjects;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace BoardGameTools.Application.Users.Commands.AddUser
 {
-    public record AddUserCommand(string Email, string Password, string ConfirmPassword, string ConfirmationLinkBase) : IRequest<Guid>;
+    public record AddUserCommand(string Email, string Password, string ConfirmPassword) : IRequest<Guid>;
 
     public class AddUserCommandHandler(
         IAppDbContext context, 
         IPasswordHasher passwordHasher,
         IEmailSender emailSender,
         IEmailTemplate emailTemplate,
+        IOptions<ClientOptions> clientOptions,
         ILogger<AddUserCommandHandler> logger
         ) : IRequestHandler<AddUserCommand, Guid>
     {
@@ -22,6 +25,7 @@ namespace BoardGameTools.Application.Users.Commands.AddUser
         private readonly IPasswordHasher _passwordHasher = passwordHasher;
         private readonly IEmailSender _emailSender = emailSender;
         private readonly IEmailTemplate _emailTemplate = emailTemplate;
+        private readonly ClientOptions _options = clientOptions.Value;
         private readonly ILogger<AddUserCommandHandler> _logger = logger;
 
         public async Task<Guid> Handle(AddUserCommand request, CancellationToken ct)
@@ -43,7 +47,7 @@ namespace BoardGameTools.Application.Users.Commands.AddUser
 
             try
             {
-                var confirmationLink = $"{request.ConfirmationLinkBase}/confirm-email?token={Uri.EscapeDataString(token)}";
+                var confirmationLink = $"{_options.BaseUrl}/confirm-email?token={Uri.EscapeDataString(token)}";
                 string emailContent = _emailTemplate.BuildEmailConfirmation(confirmationLink);
                 await _emailSender.SendAsync(email.Value, "Confirme ton compte", emailContent, ct);
             }

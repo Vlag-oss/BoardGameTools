@@ -53,7 +53,16 @@ namespace BoardGameTools.Application.Services.Tokens
             RandomNumberGenerator.Fill(bytes);
             var token = Convert.ToBase64String(bytes);
 
-            return RefreshToken.Create(HashRefreshToken(token), _dateTimeProvider.UtcNow.AddDays(_options.RefreshTokenExpirationDays), user);
+            return RefreshToken.Create(HashRefreshToken(token), _dateTimeProvider.UtcNow.AddDays(_options.RefreshTokenExpirationDays), user.Id);
+        }
+
+        public PasswordResetToken CreateResetPasswordToken(User user)
+        {
+            var bytes = new byte[64];
+            RandomNumberGenerator.Fill(bytes);
+            var token = Convert.ToBase64String(bytes);
+
+            return PasswordResetToken.Create(HashRefreshToken(token), _dateTimeProvider.UtcNow.AddMinutes(_options.ResetPasswordTokenExpirationMinutes), user.Id);
         }
 
         private string HashRefreshToken(string token)

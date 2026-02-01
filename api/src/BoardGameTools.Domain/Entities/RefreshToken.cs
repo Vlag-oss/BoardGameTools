@@ -8,26 +8,26 @@
         public DateTime? RevokedAt { get; private set; }
         public bool IsExpired(DateTime utcNow) => utcNow >= Expires;
         public DateTime Created { get; private set; }
-        public Guid UserId { get; set; }
-        public User User { get; set; } = null!;
+        public Guid UserId { get; private set; }
+        public User User { get; private set; } = null!;
 
         private RefreshToken() { }
 
-        public RefreshToken(string tokenHash, DateTime expires, User user)
+        public RefreshToken(string tokenHash, DateTime expires, Guid userId)
         {
             Id = Guid.NewGuid();
             TokenHash = tokenHash;
             Expires = expires;
             Created = DateTime.UtcNow;
-            User = user;
+            UserId = userId;
         }
 
-        public static RefreshToken Create(string tokenHash, DateTime expires, User user)
+        public static RefreshToken Create(string tokenHash, DateTime expires, Guid userId)
         {
             if (string.IsNullOrEmpty(tokenHash))
                 throw new ArgumentException("Le jeton de rafraîchissement doit contenir une valeur", nameof(tokenHash));
 
-            return new RefreshToken(tokenHash, expires, user);
+            return new RefreshToken(tokenHash, expires, userId);
         }
 
         public void Revoke(DateTime revokedAtUtc)

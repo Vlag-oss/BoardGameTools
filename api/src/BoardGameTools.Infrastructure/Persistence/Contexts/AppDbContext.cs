@@ -9,6 +9,7 @@ namespace BoardGameTools.Infrastructure.Persistence.Contexts
         public DbSet<User> Users => Set<User>();
         public DbSet<LibraryGame> LibraryGames => Set<LibraryGame>();
         public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
+        public DbSet<PasswordResetToken> PasswordResetToken => Set<PasswordResetToken>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
