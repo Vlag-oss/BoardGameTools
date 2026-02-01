@@ -13,7 +13,7 @@ namespace BoardGameTools.Domain.Entities
         public string? EmailConfirmationToken { get; private set; }
         public bool EmailConfirmed { get; private set; } = false;
 
-        public IReadOnlyCollection<LibraryGame> LibraryGames { get; private set; } = [];
+        public IReadOnlyCollection<Game> LibraryGames { get; private set; } = [];
         public RefreshToken? RefreshToken { get; private set; }
 
         private User() { }

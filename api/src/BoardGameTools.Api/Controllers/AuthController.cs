@@ -1,11 +1,12 @@
 ﻿using BoardGameTools.Api.DTOs.Login;
 using BoardGameTools.Api.DTOs.Password;
 using BoardGameTools.Api.DTOs.Register;
-using BoardGameTools.Application.Login.Commands;
-using BoardGameTools.Application.Login.DTOs;
-using BoardGameTools.Application.Password.Commands;
-using BoardGameTools.Application.Users.Commands.AddUser;
-using BoardGameTools.Application.Users.Commands.ConfirmEmail;
+using BoardGameTools.Application.Auth.ConfirmEmail.Commands;
+using BoardGameTools.Application.Auth.ForgotPassword;
+using BoardGameTools.Application.Auth.Login.Commands;
+using BoardGameTools.Application.Auth.Login.DTOs;
+using BoardGameTools.Application.Auth.Register.Commands;
+using BoardGameTools.Application.Auth.ResetPassword;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -29,7 +30,7 @@ namespace BoardGameTools.Api.Controllers
         [HttpPost("register")]
         public async Task<ActionResult<RegisterResponse>> Register(RegisterRequest request, CancellationToken ct)
         {
-            var command = new AddUserCommand(request.Email, request.Password, request.ConfirmPassword);
+            var command = new RegisterCommand(request.Email, request.Password, request.ConfirmPassword);
             var userId = await _sender.Send(command, ct);
 
             return Ok(new RegisterResponse(userId));

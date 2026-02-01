@@ -1,4 +1,4 @@
-﻿using BoardGameTools.Application.Login.Commands;
+﻿using BoardGameTools.Application.Auth.Login.Commands;
 using FluentAssertions;
 
 namespace BoardGameTools.UnitTests.Login
